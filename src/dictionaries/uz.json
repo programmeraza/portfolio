@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "about": "Biz haqimizda",
+    "projects": "Loyihalar",
+    "experience": "Tajriba",
+    "contact": "Aloqa"
+  },
+  "hero": {
+    "role": "Frontend Dasturchi",
+    "creative": "Kreativ",
+    "developer": "Dasturchi",
+    "cta": "Bog'lanish",
+    "scroll": "Pastga aylantirish"
+  },
+  "about": {
+    "label": "Men haqimda",
+    "title": "Raqamli tajribalar yaratish",
+    "desc1": "Men dizayn va animatsiyalarni chuqur tushunadigan frontend dasturchiman. Maqsadim ajoyib ko'rinadigan va mukammal ishlaydigan interfeyslarni yaratish.",
+    "desc2": "Eng yangi texnologiyalardan foydalanaman: React, Next.js, WebGL va GSAP. Yapon animatsiyasi va kiberpank estetikasidan ilhomlanganman.",
+    "stats": {
+      "exp": "Yillik tajriba",
+      "projects": "Loyihalar",
+      "awards": "Mukofotlar"
+    }
+  },
+  "marquee": {
+    "text": "CREATIVE DEVELOPER • UI ENGINEER • WEBGL EXPERT • ANIME VIBE • "
+  },
+  "projects": {
+    "label": "Mening ishlarim",
+    "title1": "Mukofotlangan",
+    "title2": "Loyihalar",
+    "viewAll": "GitHub-da ko'rish"
+  },
+  "contact": {
+    "label": "Aloqa",
+    "title1": "Keling, birgalikda",
+    "title2": "buyuk narsa yaratamiz",
+    "desc": "Loyiha g'oyasi bormi yoki shunchaki salomlashmoqchimisiz? Menga yozing.",
+    "form": {
+      "name": "Ismingiz",
+      "email": "Email manzilingiz",
+      "message": "Xabar",
+      "send": "Yuborish",
+      "sending": "Yuborilmoqda...",
+      "success": "Xabar yuborildi! Tez orada javob beraman.",
+      "error": "Xato yuz berdi. Iltimos, qayta urinib ko'ring."
+    }
+  }
+}

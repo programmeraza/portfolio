@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "about": "关于我",
+    "projects": "项目",
+    "experience": "经历",
+    "contact": "联系方式"
+  },
+  "hero": {
+    "role": "前端开发者",
+    "creative": "创意",
+    "developer": "开发者",
+    "cta": "联系我",
+    "scroll": "向下滑动"
+  },
+  "about": {
+    "label": "关于我",
+    "title": "创造数字体验",
+    "desc1": "我是一名对设计和动画有深入理解的前端开发者。我的目标是创建外观惊艳且运行完美的界面。",
+    "desc2": "我使用尖端技术：React、Next.js、WebGL和GSAP。受日本动画和赛博朋克美学启发。",
+    "stats": {
+      "exp": "年经验",
+      "projects": "项目",
+      "awards": "奖项"
+    }
+  },
+  "marquee": {
+    "text": "CREATIVE DEVELOPER • UI ENGINEER • WEBGL EXPERT • ANIME VIBE • "
+  },
+  "projects": {
+    "label": "精选作品",
+    "title1": "获奖",
+    "title2": "体验",
+    "viewAll": "在GitHub上查看"
+  },
+  "contact": {
+    "label": "联系方式",
+    "title1": "让我们创造",
+    "title2": "伟大的事物",
+    "desc": "有项目想法或者只是想打个招呼？欢迎随时联系。",
+    "form": {
+      "name": "您的名字",
+      "email": "您的邮箱",
+      "message": "信息",
+      "send": "发送",
+      "sending": "发送中...",
+      "success": "发送成功！我会尽快回复。",
+      "error": "发送失败，请重试。"
+    }
+  }
+}

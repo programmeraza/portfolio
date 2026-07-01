@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "about": "私について",
+    "projects": "プロジェクト",
+    "experience": "経歴",
+    "contact": "連絡先"
+  },
+  "hero": {
+    "role": "フロントエンド開発者",
+    "creative": "クリエイティブ",
+    "developer": "デベロッパー",
+    "cta": "連絡する",
+    "scroll": "スクロール"
+  },
+  "about": {
+    "label": "自己紹介",
+    "title": "デジタル体験の創造",
+    "desc1": "デザインとアニメーションに深い理解を持つフロントエンド開発者です。美しく完璧に機能するインターフェースを作るのが目標です。",
+    "desc2": "React、Next.js、WebGL、GSAPなどの最新技術を使用。日本のアニメやサイバーパンクの美学にインスパイアされています。",
+    "stats": {
+      "exp": "経験年数",
+      "projects": "プロジェクト",
+      "awards": "受賞歴"
+    }
+  },
+  "marquee": {
+    "text": "CREATIVE DEVELOPER • UI ENGINEER • WEBGL EXPERT • ANIME VIBE • "
+  },
+  "projects": {
+    "label": "選ばれた作品",
+    "title1": "受賞歴のある",
+    "title2": "体験",
+    "viewAll": "GitHubで見る"
+  },
+  "contact": {
+    "label": "連絡先",
+    "title1": "素晴らしいものを",
+    "title2": "共に作ろう",
+    "desc": "プロジェクトのアイデアがありますか？メッセージをお待ちしています。",
+    "form": {
+      "name": "お名前",
+      "email": "メールアドレス",
+      "message": "メッセージ",
+      "send": "送信する",
+      "sending": "送信中...",
+      "success": "送信完了！すぐにお返事します。",
+      "error": "エラーが発生しました。再試行してください。"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "experience": "Experiencia",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "role": "Desarrollador Frontend",
+    "creative": "Creativo",
+    "developer": "Desarrollador",
+    "cta": "Contáctame",
+    "scroll": "Desplazarse"
+  },
+  "about": {
+    "label": "Sobre mí",
+    "title": "Creando experiencias digitales",
+    "desc1": "Soy un desarrollador frontend con un profundo conocimiento de diseño y animaciones. Mi objetivo es crear interfaces que se vean increíbles y funcionen sin problemas.",
+    "desc2": "Utilizo tecnologías de vanguardia: React, Next.js, WebGL y GSAP. Inspirado por la animación japonesa y la estética cyberpunk.",
+    "stats": {
+      "exp": "Años de Exp",
+      "projects": "Proyectos",
+      "awards": "Premios"
+    }
+  },
+  "marquee": {
+    "text": "CREATIVE DEVELOPER • UI ENGINEER • WEBGL EXPERT • ANIME VIBE • "
+  },
+  "projects": {
+    "label": "Trabajo Destacado",
+    "title1": "Experiencias",
+    "title2": "Premiadas",
+    "viewAll": "Ver en GitHub"
+  },
+  "contact": {
+    "label": "Contacto",
+    "title1": "Construyamos",
+    "title2": "algo grande",
+    "desc": "¿Tienes una idea para un proyecto o simplemente quieres saludar? Escríbeme.",
+    "form": {
+      "name": "Tu Nombre",
+      "email": "Tu Correo",
+      "message": "Mensaje",
+      "send": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "success": "¡Mensaje enviado! Responderé pronto.",
+      "error": "Error al enviar. Por favor intenta de nuevo."
+    }
+  }
+}
