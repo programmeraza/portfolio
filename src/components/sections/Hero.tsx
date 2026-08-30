@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
-import { siteConfig } from "@/lib/data";
+import { siteConfig, stats } from "@/lib/data";
+import type { Dictionary } from "@/dictionaries/types";
 
 const HeroScene = dynamic(() => import("@/components/canvas/HeroScene"), {
   ssr: false,
@@ -12,7 +13,7 @@ const HeroScene = dynamic(() => import("@/components/canvas/HeroScene"), {
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Hero({ dict }: { dict?: any }) {
+export default function Hero({ dict }: { dict?: Dictionary }) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -122,7 +123,8 @@ export default function Hero({ dict }: { dict?: any }) {
             {siteConfig.name} — crafting immersive web experiences inspired by anime & magic.
           </p>
 
-          {/* CTAs */}
+          {/* CTAs — основной ведёт на проекты (первое, что хочет увидеть заказчик),
+              второй — прямой контакт, соответствующий подписи "Связаться" */}
           <div ref={ctaRef} className="flex flex-wrap gap-4 items-center mb-16">
             <a
               href="#projects"
@@ -132,24 +134,30 @@ export default function Hero({ dict }: { dict?: any }) {
               }}
               className="btn-primary"
             >
+              {dict?.hero?.ctaProjects || "View Projects"}
+            </a>
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="btn-outline"
+            >
               {dict?.hero?.cta || "Get in touch"}
             </a>
           </div>
 
-          {/* Stats */}
+          {/* Stats — берём из единого источника (lib/data.ts), чтобы цифры
+              не расходились с секцией About */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
-            {[
-              { value: "4+", label: dict?.about?.stats?.exp || "Years Exp" },
-              { value: "30+", label: dict?.about?.stats?.projects || "Projects" },
-              { value: "20+", label: "Technologies" },
-              { value: "100%", label: "Passion" },
-            ].map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div
                   className="text-2xl font-bold mb-1 gradient-text"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  {stat.value}
+                  {stat.value}{stat.suffix}
                 </div>
                 <div
                   className="text-xs tracking-widest uppercase"

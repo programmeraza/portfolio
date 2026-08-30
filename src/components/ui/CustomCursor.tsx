@@ -13,6 +13,12 @@ export default function CustomCursor() {
     const dot = dotRef.current;
     if (!dot) return;
 
+    // На тач-устройствах нет курсора мыши — не тратим ресурсы впустую
+    const hasFinePointer =
+      typeof window !== "undefined" &&
+      window.matchMedia("(pointer: fine)").matches;
+    if (!hasFinePointer) return;
+
     // Smooth follow using linear interpolation
     const lerp = (a: number, b: number, n: number) => a + (b - a) * n;
 

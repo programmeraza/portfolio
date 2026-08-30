@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, Noto_Sans_JP } from "next/font/google";
 import "../globals.css";
 import { locales } from "../../dictionaries";
+import { siteConfig } from "@/lib/data";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -23,9 +24,18 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "YOUR NAME — Frontend Developer",
-  description:
-    "Frontend Developer specializing in React, Next.js, and immersive web animations. Building exceptional digital experiences.",
+  title: `${siteConfig.name} — ${siteConfig.title}`,
+  description: siteConfig.description,
+  metadataBase: new URL("https://my-portfolio-kappa-orcin-91.vercel.app"),
+  openGraph: {
+    title: `${siteConfig.name} — ${siteConfig.title}`,
+    description: siteConfig.description,
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0c16",
 };
 
 export async function generateStaticParams() {

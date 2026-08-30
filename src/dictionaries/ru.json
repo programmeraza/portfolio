@@ -3,14 +3,16 @@
     "about": "Обо мне",
     "projects": "Проекты",
     "experience": "Опыт",
-    "contact": "Контакты"
+    "contact": "Контакты",
+    "skills": "Навыки"
   },
   "hero": {
     "role": "Frontend Developer",
     "creative": "Креативный",
     "developer": "Разработчик",
     "cta": "Связаться",
-    "scroll": "Скролл вниз"
+    "scroll": "Скролл вниз",
+    "ctaProjects": "Смотреть проекты"
   },
   "about": {
     "label": "Обо мне",
@@ -21,6 +23,16 @@
       "exp": "Лет опыта",
       "projects": "Проектов",
       "awards": "Наград"
+    },
+    "info": {
+      "location": "Локация",
+      "email": "Email",
+      "specialization": "Специализация",
+      "status": "Статус"
+    },
+    "infoValues": {
+      "specialization": "Frontend / UI",
+      "status": "Открыт к предложениям 🟢"
     }
   },
   "marquee": {
@@ -45,6 +57,26 @@
       "sending": "Отправка...",
       "success": "Сообщение отправлено! Я скоро отвечу.",
       "error": "Произошла ошибка. Попробуйте еще раз."
-    }
+    },
+    "available": "Открыт для работы",
+    "availableDesc": "Готов к full-time и фрилансу",
+    "telegramNote": "📱 Сообщения из формы мгновенно приходят мне в Telegram. Отвечаю в течение 24 часов."
+  },
+  "experience": {
+    "label": "Путь",
+    "title1": "Мой профессиональный",
+    "title2": "путь",
+    "desc": "История постоянного роста, решения задач и результатов.",
+    "tabWork": "💼 Опыт",
+    "tabEducation": "🎓 Образование"
+  },
+  "skills": {
+    "label": "Экспертиза",
+    "title1": "Навыки и",
+    "title2": "технологии",
+    "desc": "Набор инструментов, отточенный за годы разработки production-приложений.",
+    "frontend": "Frontend",
+    "tools": "Инструменты",
+    "stack": "Полный стек технологий"
   }
 }

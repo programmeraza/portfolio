@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { locales } from "../../dictionaries";
+import type { Dictionary } from "../../dictionaries/types";
 import { useRouter, usePathname } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Navigation({ dict, currentLang }: { dict?: any, currentLang?: string }) {
+export default function Navigation({ dict, currentLang }: { dict?: Dictionary; currentLang?: string }) {
   const navRef = useRef<HTMLElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,6 +25,7 @@ export default function Navigation({ dict, currentLang }: { dict?: any, currentL
   const navItems = [
     { label: dict?.nav?.about || "About", href: "#about" },
     { label: dict?.nav?.projects || "Projects", href: "#projects" },
+    { label: dict?.nav?.skills || "Skills", href: "#skills" },
     { label: dict?.nav?.experience || "Experience", href: "#experience" },
     { label: dict?.nav?.contact || "Contact", href: "#contact" },
   ];
@@ -197,6 +199,9 @@ export default function Navigation({ dict, currentLang }: { dict?: any, currentL
               <button
                 className="flex items-center gap-2 text-sm font-[var(--font-heading)] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.1)] transition-colors"
                 onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                aria-haspopup="listbox"
+                aria-expanded={langDropdownOpen}
+                aria-label="Change language"
               >
                 {currentLang || "ru"}
                 <svg
@@ -244,6 +249,8 @@ export default function Navigation({ dict, currentLang }: { dict?: any, currentL
             <button
               className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1 relative z-[60] rounded-full bg-[rgba(255,255,255,0.05)]"
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
             >
               <span
                 className={`block w-4 h-[2px] bg-[var(--color-text-primary)] transition-transform duration-300 ${

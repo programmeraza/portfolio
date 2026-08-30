@@ -3,14 +3,16 @@
     "about": "Biz haqimizda",
     "projects": "Loyihalar",
     "experience": "Tajriba",
-    "contact": "Aloqa"
+    "contact": "Aloqa",
+    "skills": "Ko'nikmalar"
   },
   "hero": {
     "role": "Frontend Dasturchi",
     "creative": "Kreativ",
     "developer": "Dasturchi",
     "cta": "Bog'lanish",
-    "scroll": "Pastga aylantirish"
+    "scroll": "Pastga aylantirish",
+    "ctaProjects": "Loyihalarni ko'rish"
   },
   "about": {
     "label": "Men haqimda",
@@ -21,6 +23,16 @@
       "exp": "Yillik tajriba",
       "projects": "Loyihalar",
       "awards": "Mukofotlar"
+    },
+    "info": {
+      "location": "Manzil",
+      "email": "Email",
+      "specialization": "Mutaxassislik",
+      "status": "Holat"
+    },
+    "infoValues": {
+      "specialization": "Frontend / UI",
+      "status": "Takliflarga ochiq 🟢"
     }
   },
   "marquee": {
@@ -45,6 +57,26 @@
       "sending": "Yuborilmoqda...",
       "success": "Xabar yuborildi! Tez orada javob beraman.",
       "error": "Xato yuz berdi. Iltimos, qayta urinib ko'ring."
-    }
+    },
+    "available": "Ishlashga tayyor",
+    "availableDesc": "To'liq stavka va frilansga ochiq",
+    "telegramNote": "📱 Formadagi xabarlar darhol Telegramimga yetib boradi. 24 soat ichida javob beraman."
+  },
+  "experience": {
+    "label": "Yo'l",
+    "title1": "Mening professional",
+    "title2": "yo'lim",
+    "desc": "Doimiy o'sish, muammolarni yechish va natijalar tarixi.",
+    "tabWork": "💼 Tajriba",
+    "tabEducation": "🎓 Ta'lim"
+  },
+  "skills": {
+    "label": "Ekspertiza",
+    "title1": "Ko'nikmalar va",
+    "title2": "texnologiyalar",
+    "desc": "Ishlab chiqarish darajasidagi ilovalarni yaratish tajribasi asosida shakllangan vositalar to'plami.",
+    "frontend": "Frontend",
+    "tools": "Vositalar",
+    "stack": "To'liq texnologiyalar to'plami"
   }
 }

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { siteConfig } from "@/lib/data";
-
+import type { Dictionary } from "@/dictionaries/types";
 gsap.registerPlugin(ScrollTrigger);
 
 interface FormData {
@@ -102,7 +102,7 @@ function FloatInput({
   );
 }
 
-export default function Contact({ dict }: { dict?: any }) {
+export default function Contact({ dict }: { dict?: Dictionary }) {
   const sectionRef = useRef<HTMLElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
@@ -236,13 +236,13 @@ export default function Contact({ dict }: { dict?: any }) {
                     className="text-sm font-semibold"
                     style={{ fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}
                   >
-                    Available for work
+                    {dict?.contact?.available || "Available for work"}
                   </div>
                   <div
                     className="text-xs"
                     style={{ color: "var(--color-text-secondary)" }}
                   >
-                    Open to full-time & freelance
+                    {dict?.contact?.availableDesc || "Open to full-time & freelance"}
                   </div>
                 </div>
               </div>
@@ -268,7 +268,7 @@ export default function Contact({ dict }: { dict?: any }) {
                   </svg>
                 ),
                 label: "Telegram",
-                value: "@yourusername",
+                value: siteConfig.telegramHandle,
                 href: siteConfig.telegram,
               },
               {
@@ -278,7 +278,7 @@ export default function Contact({ dict }: { dict?: any }) {
                   </svg>
                 ),
                 label: "GitHub",
-                value: "@yourusername",
+                value: siteConfig.githubHandle,
                 href: siteConfig.github,
               },
             ].map((item) => (
@@ -324,8 +324,8 @@ export default function Contact({ dict }: { dict?: any }) {
                 color: "var(--color-text-secondary)",
               }}
             >
-              📱 Form messages are delivered instantly to my Telegram.
-              Expect a reply within 24 hours.
+              {dict?.contact?.telegramNote ||
+                "📱 Form messages are delivered instantly to my Telegram. Expect a reply within 24 hours."}
             </div>
           </div>
 
@@ -370,7 +370,7 @@ export default function Contact({ dict }: { dict?: any }) {
                   color: "var(--color-accent-emerald)",
                 }}
               >
-                ✅ Message sent! I&apos;ll get back to you soon.
+                ✅ {dict?.contact?.form?.success || "Message sent! I'll get back to you soon."}
               </div>
             )}
 
@@ -383,7 +383,7 @@ export default function Contact({ dict }: { dict?: any }) {
                   color: "#ef4444",
                 }}
               >
-                ❌ {errorMessage || "Something went wrong. Please try again."}
+                ❌ {errorMessage || dict?.contact?.form?.error || "Something went wrong. Please try again."}
               </div>
             )}
 

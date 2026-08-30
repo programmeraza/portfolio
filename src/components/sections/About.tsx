@@ -4,10 +4,11 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { siteConfig, stats } from "@/lib/data";
+import type { Dictionary } from "@/dictionaries/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function About({ dict }: { dict: any }) {
+export default function About({ dict }: { dict?: Dictionary }) {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const countersRef = useRef<HTMLDivElement>(null);
@@ -144,7 +145,7 @@ export default function About({ dict }: { dict: any }) {
                   style={{ background: "var(--color-accent-emerald)" }}
                 />
                 <span className="text-xs font-medium" style={{ fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
-                  Available for work
+                  {dict?.contact?.available || "Available for work"}
                 </span>
               </div>
             </div>
@@ -167,16 +168,22 @@ export default function About({ dict }: { dict: any }) {
             {/* Info grid */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: "Location", value: siteConfig.location },
-                { label: "Email", value: siteConfig.email },
-                { label: "Specialization", value: "Frontend / UI" },
-                { label: "Status", value: "Open to offers 🟢" },
+                { label: dict?.about?.info?.location || "Location", value: siteConfig.location },
+                { label: dict?.about?.info?.email || "Email", value: siteConfig.email },
+                {
+                  label: dict?.about?.info?.specialization || "Specialization",
+                  value: dict?.about?.infoValues?.specialization || "Frontend / UI",
+                },
+                {
+                  label: dict?.about?.info?.status || "Status",
+                  value: dict?.about?.infoValues?.status || "Open to offers 🟢",
+                },
               ].map((item) => (
                 <div key={item.label} className="glass-card p-4">
                   <div
                     className="text-xs text-[var(--color-text-muted)] mt-1 font-semibold tracking-widest uppercase font-[var(--font-heading)]"
                   >
-                    {dict?.about?.stats?.exp || "Years Exp"}
+                    {item.label}
                   </div>
                   <div
                     className="text-sm font-medium"
@@ -189,6 +196,8 @@ export default function About({ dict }: { dict: any }) {
             </div>
 
             {/* CTA */}
+            {/* ⚠️ Ссылка ведёт на /public/cv.pdf — этого файла сейчас нет в проекте.
+                Добавьте свой PDF-файл резюме по этому пути, иначе кнопка будет вести на 404. */}
             <div className="flex gap-4">
               <a
                 href="/cv.pdf"

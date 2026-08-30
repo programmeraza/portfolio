@@ -3,14 +3,16 @@
     "about": "About",
     "projects": "Projects",
     "experience": "Experience",
-    "contact": "Contact"
+    "contact": "Contact",
+    "skills": "Skills"
   },
   "hero": {
     "role": "Frontend Developer",
     "creative": "Creative",
     "developer": "Developer",
     "cta": "Get in touch",
-    "scroll": "Scroll down"
+    "scroll": "Scroll down",
+    "ctaProjects": "View Projects"
   },
   "about": {
     "label": "About me",
@@ -21,6 +23,16 @@
       "exp": "Years Exp",
       "projects": "Projects",
       "awards": "Awards"
+    },
+    "info": {
+      "location": "Location",
+      "email": "Email",
+      "specialization": "Specialization",
+      "status": "Status"
+    },
+    "infoValues": {
+      "specialization": "Frontend / UI",
+      "status": "Open to offers 🟢"
     }
   },
   "marquee": {
@@ -45,6 +57,26 @@
       "sending": "Sending...",
       "success": "Message sent! I'll reply soon.",
       "error": "Error sending. Please try again."
-    }
+    },
+    "available": "Available for work",
+    "availableDesc": "Open to full-time & freelance",
+    "telegramNote": "📱 Form messages are delivered instantly to my Telegram. Expect a reply within 24 hours."
+  },
+  "experience": {
+    "label": "Journey",
+    "title1": "My professional",
+    "title2": "timeline",
+    "desc": "A story of continuous growth, problem-solving, and impact.",
+    "tabWork": "💼 Experience",
+    "tabEducation": "🎓 Education"
+  },
+  "skills": {
+    "label": "Expertise",
+    "title1": "Skills &",
+    "title2": "Technologies",
+    "desc": "A toolkit built through years of crafting production-grade applications.",
+    "frontend": "Frontend",
+    "tools": "Tools",
+    "stack": "Full Tech Stack"
   }
 }

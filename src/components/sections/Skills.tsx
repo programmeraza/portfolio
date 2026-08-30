@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { skills, techStack } from "@/lib/data";
+import type { Dictionary } from "@/dictionaries/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -130,7 +131,7 @@ function CircularSkill({
   );
 }
 
-export default function Skills({ dict }: { dict?: any }) {
+export default function Skills({ dict }: { dict?: Dictionary }) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLDivElement>(null);
@@ -189,16 +190,16 @@ export default function Skills({ dict }: { dict?: any }) {
       <div className="container-custom">
         {/* Header */}
         <div ref={headingRef} className="text-center mb-16">
-          <div className="section-label justify-center">Expertise</div>
+          <div className="section-label justify-center">{dict?.skills?.label || "Expertise"}</div>
           <h2 className="text-heading mb-4" style={{ color: "var(--color-text-primary)" }}>
-            Skills &{" "}
-            <span className="gradient-text">Technologies</span>
+            {dict?.skills?.title1 || "Skills &"}{" "}
+            <span className="gradient-text">{dict?.skills?.title2 || "Technologies"}</span>
           </h2>
           <p
             className="text-subheading max-w-xl mx-auto"
             style={{ color: "var(--color-text-secondary)" }}
           >
-            A toolkit built through years of crafting production-grade applications.
+            {dict?.skills?.desc || "A toolkit built through years of crafting production-grade applications."}
           </p>
         </div>
 
@@ -210,7 +211,7 @@ export default function Skills({ dict }: { dict?: any }) {
               className="text-lg font-bold mb-8 flex items-center gap-2"
               style={{ fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}
             >
-              <span className="gradient-text">Frontend</span>
+              <span className="gradient-text">{dict?.skills?.frontend || "Frontend"}</span>
               <div className="flex-1 h-px" style={{ background: "var(--color-border)" }} />
             </h3>
             <div className="grid grid-cols-3 gap-6">

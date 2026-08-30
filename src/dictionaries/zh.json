@@ -3,14 +3,16 @@
     "about": "关于我",
     "projects": "项目",
     "experience": "经历",
-    "contact": "联系方式"
+    "contact": "联系方式",
+    "skills": "技能"
   },
   "hero": {
     "role": "前端开发者",
     "creative": "创意",
     "developer": "开发者",
     "cta": "联系我",
-    "scroll": "向下滑动"
+    "scroll": "向下滑动",
+    "ctaProjects": "查看项目"
   },
   "about": {
     "label": "关于我",
@@ -21,6 +23,16 @@
       "exp": "年经验",
       "projects": "项目",
       "awards": "奖项"
+    },
+    "info": {
+      "location": "位置",
+      "email": "邮箱",
+      "specialization": "专长",
+      "status": "状态"
+    },
+    "infoValues": {
+      "specialization": "前端 / UI",
+      "status": "接受工作邀约 🟢"
     }
   },
   "marquee": {
@@ -45,6 +57,26 @@
       "sending": "发送中...",
       "success": "发送成功！我会尽快回复。",
       "error": "发送失败，请重试。"
-    }
+    },
+    "available": "接受工作邀约",
+    "availableDesc": "全职与自由职业均可",
+    "telegramNote": "📱 表单信息会立即发送到我的Telegram。我会在24小时内回复。"
+  },
+  "experience": {
+    "label": "历程",
+    "title1": "我的职业",
+    "title2": "时间线",
+    "desc": "持续成长、解决问题和创造影响力的故事。",
+    "tabWork": "💼 经历",
+    "tabEducation": "🎓 教育"
+  },
+  "skills": {
+    "label": "专长",
+    "title1": "技能与",
+    "title2": "技术",
+    "desc": "多年打造生产级应用积累的工具集。",
+    "frontend": "前端",
+    "tools": "工具",
+    "stack": "完整技术栈"
   }
 }

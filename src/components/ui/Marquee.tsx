@@ -3,10 +3,11 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { Dictionary } from "../../dictionaries/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Marquee({ dict }: { dict: any }) {
+export default function Marquee({ dict }: { dict?: Dictionary }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 

@@ -3,14 +3,16 @@
     "about": "私について",
     "projects": "プロジェクト",
     "experience": "経歴",
-    "contact": "連絡先"
+    "contact": "連絡先",
+    "skills": "スキル"
   },
   "hero": {
     "role": "フロントエンド開発者",
     "creative": "クリエイティブ",
     "developer": "デベロッパー",
     "cta": "連絡する",
-    "scroll": "スクロール"
+    "scroll": "スクロール",
+    "ctaProjects": "プロジェクトを見る"
   },
   "about": {
     "label": "自己紹介",
@@ -21,6 +23,16 @@
       "exp": "経験年数",
       "projects": "プロジェクト",
       "awards": "受賞歴"
+    },
+    "info": {
+      "location": "所在地",
+      "email": "メール",
+      "specialization": "専門分野",
+      "status": "ステータス"
+    },
+    "infoValues": {
+      "specialization": "フロントエンド / UI",
+      "status": "お仕事のご相談受付中 🟢"
     }
   },
   "marquee": {
@@ -45,6 +57,26 @@
       "sending": "送信中...",
       "success": "送信完了！すぐにお返事します。",
       "error": "エラーが発生しました。再試行してください。"
-    }
+    },
+    "available": "お仕事のご相談受付中",
+    "availableDesc": "正社員・フリーランス案件どちらも歓迎",
+    "telegramNote": "📱 フォームのメッセージはすぐにTelegramに届きます。24時間以内に返信します。"
+  },
+  "experience": {
+    "label": "軌跡",
+    "title1": "私のプロフェッショナルな",
+    "title2": "経歴",
+    "desc": "継続的な成長、課題解決、そして成果の物語。",
+    "tabWork": "💼 経歴",
+    "tabEducation": "🎓 学歴"
+  },
+  "skills": {
+    "label": "専門性",
+    "title1": "スキルと",
+    "title2": "技術",
+    "desc": "実運用レベルのアプリケーション開発を通じて培ったツールキット。",
+    "frontend": "フロントエンド",
+    "tools": "ツール",
+    "stack": "技術スタック全体"
   }
 }

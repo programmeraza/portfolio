@@ -4,10 +4,11 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projects } from "@/lib/data";
+import type { Dictionary } from "@/dictionaries/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Projects({ dict }: { dict?: any }) {
+export default function Projects({ dict }: { dict?: Dictionary }) {
   const sectionRef = useRef<HTMLElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

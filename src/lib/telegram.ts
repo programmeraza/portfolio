@@ -24,7 +24,7 @@ export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
   }
 
   const timestamp = new Date().toLocaleString("ru-RU", {
-    timeZone: "Europe/Moscow",
+    timeZone: "Asia/Tashkent",
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

@@ -3,14 +3,16 @@
     "about": "Sobre mí",
     "projects": "Proyectos",
     "experience": "Experiencia",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "skills": "Habilidades"
   },
   "hero": {
     "role": "Desarrollador Frontend",
     "creative": "Creativo",
     "developer": "Desarrollador",
     "cta": "Contáctame",
-    "scroll": "Desplazarse"
+    "scroll": "Desplazarse",
+    "ctaProjects": "Ver Proyectos"
   },
   "about": {
     "label": "Sobre mí",
@@ -21,6 +23,16 @@
       "exp": "Años de Exp",
       "projects": "Proyectos",
       "awards": "Premios"
+    },
+    "info": {
+      "location": "Ubicación",
+      "email": "Correo",
+      "specialization": "Especialización",
+      "status": "Estado"
+    },
+    "infoValues": {
+      "specialization": "Frontend / UI",
+      "status": "Abierto a ofertas 🟢"
     }
   },
   "marquee": {
@@ -45,6 +57,26 @@
       "sending": "Enviando...",
       "success": "¡Mensaje enviado! Responderé pronto.",
       "error": "Error al enviar. Por favor intenta de nuevo."
-    }
+    },
+    "available": "Disponible para trabajar",
+    "availableDesc": "Abierto a tiempo completo y freelance",
+    "telegramNote": "📱 Los mensajes del formulario llegan al instante a mi Telegram. Respondo en 24 horas."
+  },
+  "experience": {
+    "label": "Trayectoria",
+    "title1": "Mi trayectoria",
+    "title2": "profesional",
+    "desc": "Una historia de crecimiento continuo, resolución de problemas e impacto.",
+    "tabWork": "💼 Experiencia",
+    "tabEducation": "🎓 Educación"
+  },
+  "skills": {
+    "label": "Experiencia",
+    "title1": "Habilidades y",
+    "title2": "Tecnologías",
+    "desc": "Un conjunto de herramientas forjado a través de años creando aplicaciones de nivel producción.",
+    "frontend": "Frontend",
+    "tools": "Herramientas",
+    "stack": "Stack Tecnológico Completo"
   }
 }

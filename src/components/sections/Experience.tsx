@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { experience } from "@/lib/data";
+import type { Dictionary } from "@/dictionaries/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
 type Tab = "work" | "education";
 
-export default function Experience({ dict }: { dict?: any }) {
+export default function Experience({ dict }: { dict?: Dictionary }) {
   const [activeTab, setActiveTab] = useState<Tab>("work");
   const sectionRef = useRef<HTMLElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -86,16 +87,16 @@ export default function Experience({ dict }: { dict?: any }) {
       <div className="container-custom">
         {/* Header */}
         <div ref={headingRef} className="text-center mb-16">
-          <div className="section-label justify-center">Journey</div>
+          <div className="section-label justify-center">{dict?.experience?.label || "Journey"}</div>
           <h2 className="text-heading mb-4" style={{ color: "var(--color-text-primary)" }}>
-            My professional{" "}
-            <span className="gradient-text">timeline</span>
+            {dict?.experience?.title1 || "My professional"}{" "}
+            <span className="gradient-text">{dict?.experience?.title2 || "timeline"}</span>
           </h2>
           <p
             className="text-subheading max-w-xl mx-auto"
             style={{ color: "var(--color-text-secondary)" }}
           >
-            A story of continuous growth, problem-solving, and impact.
+            {dict?.experience?.desc || "A story of continuous growth, problem-solving, and impact."}
           </p>
         </div>
 
@@ -120,7 +121,9 @@ export default function Experience({ dict }: { dict?: any }) {
                   color: activeTab === tab ? "#000" : "var(--color-text-secondary)",
                 }}
               >
-                {tab === "work" ? "💼 Experience" : "🎓 Education"}
+                {tab === "work"
+                  ? dict?.experience?.tabWork || "💼 Experience"
+                  : dict?.experience?.tabEducation || "🎓 Education"}
               </button>
             ))}
           </div>
