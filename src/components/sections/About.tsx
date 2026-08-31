@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { siteConfig, stats } from "@/lib/data";
@@ -109,32 +110,16 @@ export default function About({ dict }: { dict?: Dictionary }) {
               className="relative z-10 rounded-2xl overflow-hidden aspect-[4/5]"
               style={{ clipPath: "inset(100% 0 0 0)" }}
             >
-              {/* Replace this div with your actual <Image /> component */}
-              <div
-                className="w-full h-full flex flex-col items-center justify-center gap-4"
-                style={{
-                  background: "linear-gradient(135deg, rgba(0,212,255,0.1) 0%, rgba(139,92,246,0.1) 100%)",
-                  border: "1px solid var(--color-border-strong)",
-                  borderRadius: "inherit",
-                }}
-              >
-                <div
-                  className="w-24 h-24 rounded-full flex items-center justify-center text-4xl"
-                  style={{ background: "var(--gradient-primary)" }}
-                >
-                  👨‍💻
-                </div>
-                <p
-                  className="text-sm text-center px-8"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  Replace with your photo
-                  <br />
-                  <code className="text-xs" style={{ color: "var(--color-accent-cyan)" }}>
-                    /public/avatar.jpg
-                  </code>
-                </p>
-              </div>
+              {/* Ваше фото — /public/avatar.jpg */}
+              <Image
+                src="/avatar.jpg"
+                alt={`${siteConfig.name} — ${siteConfig.title}`}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                style={{ borderRadius: "inherit" }}
+              />
 
               {/* Overlay badge */}
               <div

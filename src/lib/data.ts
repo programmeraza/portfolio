@@ -141,28 +141,51 @@ export const projects = [
 ];
 
 // ⚠️ Это ваша реальная трудовая/учебная история — я не могу её выдумать за вас.
-// Замените title/company/period/description на факты, иначе на сайте будет ложь.
+// Работа построена на ваших реальных проектах (AQL/WellFit/NEUROTECH) как freelance-путь.
+// Образование ниже — заглушка, замените или уберите пункт, если не актуально.
 export const experience = [
   {
     id: 1,
     type: "work",
-    title: "[ЗАПОЛНИТЕ] Например: Frontend Developer",
-    company: "[ЗАПОЛНИТЕ КОМПАНИЮ или укажите Freelance]",
-    period: "[ЗАПОЛНИТЕ ПЕРИОД, напр. 2023 — н.в.]",
+    title: "Frontend Developer",
+    company: "Freelance — NEUROTECH",
+    period: "2025",
     description:
-      "[ЗАПОЛНИТЕ] Кратко — что делали, какой был результат (цифры, метрики).",
-    tech: ["React", "Next.js", "TypeScript", "GSAP"],
+      "Многоязычный (RU/EN/UZ) корпоративный сайт для IT/AI-компании: услуги по разработке, AI-интеграциям и Big Data. Полный цикл — от вёрстки до деплоя.",
+    tech: ["Next.js", "i18n", "GSAP"],
     color: "#06B6D4",
   },
   {
     id: 2,
+    type: "work",
+    title: "Frontend Developer",
+    company: "Freelance — WellFit",
+    period: "2025",
+    description:
+      "Коммерческий лендинг фитнес-клуба: видео-хиро, форма записи, мультиязычность. Сайт, который реально приводит клиентов в зал.",
+    tech: ["Next.js", "Video Hero", "i18n"],
+    color: "#10B981",
+  },
+  {
+    id: 3,
+    type: "work",
+    title: "Frontend Developer",
+    company: "Freelance — AQL",
+    period: "2024 — 2025",
+    description:
+      "Брендовый сайт архитектурного бюро на стыке культурного наследия и параметрического дизайна: кастомный WebGL-скролл, цифровой манифест бренда.",
+    tech: ["WebGL", "Custom Scroll", "Branding"],
+    color: "#8B5CF6",
+  },
+  {
+    id: 4,
     type: "education",
     title: "[ЗАПОЛНИТЕ] Например: Computer Science",
     company: "[ЗАПОЛНИТЕ УЧЕБНОЕ ЗАВЕДЕНИЕ]",
     period: "[ЗАПОЛНИТЕ ПЕРИОД]",
     description: "[ЗАПОЛНИТЕ]",
     tech: ["CS Fundamentals"],
-    color: "#10B981",
+    color: "#F59E0B",
   },
 ];
 
