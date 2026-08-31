@@ -5,16 +5,16 @@
 // ============================================================
 
 export const siteConfig = {
-  name: "[ЗАПОЛНИТЕ ИМЯ]",
+  name: "Азиз Каримбердиев",
   title: "Frontend Developer",
   description:
     "Создаю впечатляющий digital-опыт с помощью React, Next.js, GSAP и WebGL — от корпоративных сайтов до брендовых интерактивных проектов.",
-  email: "[ЗАПОЛНИТЕ EMAIL]",
+  email: "karimberdiyevaziz077@gmail.com",
   location: "Ташкент, Узбекистан",
   github: "https://github.com/programmeraza",
-  linkedin: "[ЗАПОЛНИТЕ LINKEDIN, или удалите ссылку в Footer/Contact]",
-  telegram: "[ЗАПОЛНИТЕ ССЫЛКУ НА TELEGRAM, напр. https://t.me/username]",
-  telegramHandle: "[ЗАПОЛНИТЕ @username]",
+  linkedin: "", // не указан — блок в Footer скрывается автоматически, если пусто
+  telegram: "https://t.me/aziz_k_11",
+  telegramHandle: "@aziz_k_11",
   githubHandle: "@programmeraza",
   availableForWork: true,
 };

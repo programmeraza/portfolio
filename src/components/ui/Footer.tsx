@@ -67,24 +67,26 @@ export default function Footer({ dict: _dict }: { dict?: Dictionary }) {
               © {year} {siteConfig.name}. Crafted with ❤️ using Next.js, GSAP & Three.js
             </p>
 
-            {/* Social */}
+            {/* Social — ссылка не рендерится, если поле пустое (напр. LinkedIn не указан) */}
             <div className="flex items-center gap-3">
               {[
                 { href: siteConfig.github, label: "GitHub" },
                 { href: siteConfig.linkedin, label: "LinkedIn" },
                 { href: siteConfig.telegram, label: "Telegram" },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs transition-colors duration-300 hover:text-[var(--color-accent-cyan)]"
-                  style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-heading)" }}
-                >
-                  {s.label}
-                </a>
-              ))}
+              ]
+                .filter((s) => Boolean(s.href))
+                .map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs transition-colors duration-300 hover:text-[var(--color-accent-cyan)]"
+                    style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-heading)" }}
+                  >
+                    {s.label}
+                  </a>
+                ))}
             </div>
           </div>
         </div>
