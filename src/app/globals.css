@@ -156,6 +156,9 @@ body::before {
   background: white;
   top: 50%;
   left: 50%;
+  /* mix-blend-mode isn't inherited — without this, the bars render as
+     flat opaque white and vanish over white surfaces (e.g. .btn-primary). */
+  mix-blend-mode: difference;
 }
 #cursor-dot.cursor-crosshair::before {
   width: 100%;
