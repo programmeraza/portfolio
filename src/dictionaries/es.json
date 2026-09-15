@@ -50,6 +50,7 @@
     "title2": "algo grande",
     "desc": "¿Tienes una idea para un proyecto o simplemente quieres saludar? Escríbeme.",
     "form": {
+      "open": "Escribir mensaje",
       "name": "Tu Nombre",
       "email": "Tu Correo",
       "message": "Mensaje",
