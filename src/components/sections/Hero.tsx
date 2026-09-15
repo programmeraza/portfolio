@@ -107,6 +107,7 @@ export default function Hero({ dict }: { dict?: Dictionary }) {
         <div className="max-w-5xl">
           {/* Label */}
           <div className="section-label mb-8">
+            <span className="glitch-accent" aria-hidden="true" />
             <span>{dict?.hero?.role || "Frontend Developer"}</span>
           </div>
 

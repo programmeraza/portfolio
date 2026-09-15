@@ -158,6 +158,12 @@ export default function Loader({ onComplete }: LoaderProps) {
       >
         Loading Experience
       </p>
+      <p
+        className="mt-2 text-[0.65rem] tracking-[0.2em] uppercase"
+        style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-mono)", opacity: 0.6 }}
+      >
+        {"// initializing_ui"}
+      </p>
     </div>
   );
 }
