@@ -97,8 +97,8 @@ function CircularSkill({
           />
           <defs>
             <linearGradient id="skillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00d4ff" />
-              <stop offset="100%" stopColor="#8b5cf6" />
+              <stop offset="0%" stopColor="#4f9dff" />
+              <stop offset="100%" stopColor="#ff5fc4" />
             </linearGradient>
           </defs>
         </svg>
@@ -239,13 +239,7 @@ export default function Skills({ dict }: { dict?: Dictionary }) {
         </div>
 
         {/* Tech stack floating pills */}
-        <div
-          className="rounded-2xl p-8"
-          style={{
-            background: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-          }}
-        >
+        <div className="glass-card p-8">
           <p
             className="text-center text-sm mb-8 tracking-widest uppercase"
             style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-heading)" }}

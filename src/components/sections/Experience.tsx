@@ -135,7 +135,7 @@ export default function Experience({ dict }: { dict?: Dictionary }) {
           <div
             ref={lineRef}
             className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px hidden md:block"
-            style={{ background: "var(--color-border-strong)" }}
+            style={{ background: "var(--gradient-primary)" }}
           />
 
           <div className="space-y-8">
