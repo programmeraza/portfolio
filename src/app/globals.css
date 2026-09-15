@@ -4,36 +4,43 @@
    DESIGN TOKENS — CSS Custom Properties
    ============================================================ */
 :root {
-  /* Colors - Anime Twilight Vibe */
-  --color-bg: #0b0c16;
-  --color-bg-secondary: #131526;
-  --color-surface: rgba(255, 255, 255, 0.04);
-  --color-surface-hover: rgba(255, 255, 255, 0.08);
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.15);
+  /* Colors - Iridescent Futurism */
+  --color-bg: #05050a;
+  --color-bg-secondary: #0d0e1a;
+  --color-surface: rgba(255, 255, 255, 0.045);
+  --color-surface-hover: rgba(255, 255, 255, 0.09);
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
 
   /* Text */
-  --color-text-primary: #f0f0f0;
-  --color-text-secondary: rgba(240, 240, 240, 0.6);
-  --color-text-muted: rgba(240, 240, 240, 0.35);
+  --color-text-primary: #f2f2f5;
+  --color-text-secondary: rgba(242, 242, 245, 0.62);
+  --color-text-muted: rgba(242, 242, 245, 0.36);
 
-  /* Accent - Sakura & Magic */
-  --color-accent-cyan: #ff7eb3;
-  --color-accent-violet: #7b2cbf;
+  /* Accent - Iridescent */
+  --color-accent-violet: #7b6cff;
+  --color-accent-blue: #4f9dff;
+  --color-accent-magenta: #ff5fc4;
+  --color-accent-lime: #d4ff4f;
   --color-accent-emerald: #10b981;
   --color-accent-amber: #f59e0b;
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #ff7eb3 0%, #7b2cbf 100%);
-  
+  --gradient-primary: linear-gradient(135deg, #7b6cff 0%, #4f9dff 45%, #ff5fc4 100%);
+  --gradient-iridescent: conic-gradient(from 180deg at 50% 50%, #7b6cff, #4f9dff, #ff5fc4, #7b6cff);
+
   /* Typography */
   --font-heading: var(--font-space-grotesk), "Space Grotesk", sans-serif;
   --font-body: var(--font-inter), "Inter", sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
 
   /* Spacing */
   --section-padding: clamp(6rem, 12vw, 14rem);
   --container-max: 1280px;
   --container-padding: clamp(1.5rem, 5vw, 4rem);
+
+  /* HUD chrome */
+  --grid-size: 64px;
 
   /* Timing */
   --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -47,6 +54,11 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   /* Use Lenis for smooth scroll, but keep basic behavior fallback */
+  /* Some sections (Marquee, Projects' pinned horizontal scroll) are
+     intentionally wider than the viewport. `overflow-x: hidden` on body
+     alone doesn't reliably stop the viewport from being horizontally
+     scrollable in every engine — set it here too so it can't leak. */
+  overflow-x: hidden;
 }
 
 body {
@@ -127,6 +139,116 @@ body::before {
 /* Hide ring, focus on difference dot for premium feel */
 #cursor-ring {
   display: none;
+}
+
+/* Crosshair variant — swapped in via a class on #cursor-dot (see CustomCursor.tsx).
+   Two thin bars instead of a circle; same lerp/hover JS, CSS-only shape change. */
+#cursor-dot.cursor-crosshair {
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border-radius: 0;
+}
+#cursor-dot.cursor-crosshair::before,
+#cursor-dot.cursor-crosshair::after {
+  content: "";
+  position: absolute;
+  background: white;
+  top: 50%;
+  left: 50%;
+}
+#cursor-dot.cursor-crosshair::before {
+  width: 100%;
+  height: 1px;
+  transform: translate(-50%, -50%);
+}
+#cursor-dot.cursor-crosshair::after {
+  width: 1px;
+  height: 100%;
+  transform: translate(-50%, -50%);
+}
+#cursor-dot.cursor-crosshair.cursor-hover {
+  width: 36px;
+  height: 36px;
+}
+
+/* ============================================================
+   HUD CHROME — technical grid overlay + corner readouts
+   ============================================================ */
+.hud-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+@media (max-width: 640px) {
+  .hud-grid {
+    display: none;
+  }
+}
+
+.hud-corner-label {
+  position: fixed;
+  z-index: 3;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.hud-corner-label--tl {
+  top: 5.5rem;
+  left: clamp(1.5rem, 5vw, 4rem);
+}
+
+.hud-corner-label--tr {
+  top: 5.5rem;
+  right: clamp(1.5rem, 5vw, 4rem);
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .hud-corner-label {
+    display: none;
+  }
+}
+
+.glitch-accent {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.glitch-accent::before,
+.glitch-accent::after {
+  content: "";
+  position: absolute;
+  border: 1px solid var(--color-accent-lime);
+  opacity: 0.6;
+}
+
+.glitch-accent::before {
+  width: 60%;
+  height: 60%;
+  top: 0;
+  left: 0;
+}
+
+.glitch-accent::after {
+  width: 40%;
+  height: 40%;
+  bottom: 0;
+  right: 0;
 }
 
 /* ============================================================

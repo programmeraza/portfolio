@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter, Noto_Sans_JP } from "next/font/google";
+import { Space_Grotesk, Inter, Noto_Sans_JP, JetBrains_Mono } from "next/font/google";
 import "../globals.css";
 import { locales, defaultLocale } from "../../dictionaries";
 import { siteConfig } from "@/lib/data";
@@ -20,6 +20,13 @@ const inter = Inter({
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
   variable: "--font-noto-jp",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -55,7 +62,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0b0c16",
+  themeColor: "#05050a",
 };
 
 export async function generateStaticParams() {
@@ -71,7 +78,7 @@ export default async function RootLayout(props: {
   return (
     <html lang={lang} className="scroll-smooth">
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {props.children}
       </body>

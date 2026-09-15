@@ -16,6 +16,7 @@ import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Skills from "@/components/sections/Skills";
 import Contact from "@/components/sections/Contact";
+import { siteConfig } from "@/lib/data";
 import type { Dictionary } from "../../dictionaries/types";
 
 // Cursor — no SSR
@@ -93,6 +94,14 @@ export default function HomeClient({
           transition: "opacity 0.5s ease",
         }}
       >
+        <div className="hud-grid" aria-hidden="true" />
+        <span className="hud-corner-label hud-corner-label--tl" aria-hidden="true">
+          {siteConfig.githubHandle}
+        </span>
+        <span className="hud-corner-label hud-corner-label--tr" aria-hidden="true">
+          {siteConfig.availableForWork ? "STATUS // AVAILABLE" : "STATUS // BOOKED"}
+        </span>
+
         <Navigation dict={dict} currentLang={lang} />
 
         <main>
