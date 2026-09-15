@@ -1,32 +1,40 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter, Noto_Sans_JP, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Onest, IBM_Plex_Mono, Zen_Kaku_Gothic_New, Noto_Sans_SC } from "next/font/google";
 import "../globals.css";
 import { locales, defaultLocale } from "../../dictionaries";
 import { siteConfig } from "@/lib/data";
 
-const spaceGrotesk = Space_Grotesk({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-bricolage",
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const inter = Inter({
+const onest = Onest({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
+  variable: "--font-onest",
   display: "swap",
 });
 
-const notoSansJP = Noto_Sans_JP({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-noto-jp",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-plex-mono",
   weight: ["400", "500"],
+  display: "swap",
+});
+
+const zenKaku = Zen_Kaku_Gothic_New({
+  subsets: ["latin"],
+  variable: "--font-zen-kaku",
+  weight: ["400", "700"],
+  display: "swap",
+});
+
+const notoSansSC = Noto_Sans_SC({
+  subsets: ["latin"],
+  variable: "--font-noto-sc",
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -62,7 +70,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: "#05050a",
+  themeColor: "#0a0908",
 };
 
 export async function generateStaticParams() {
@@ -76,9 +84,9 @@ export default async function RootLayout(props: {
   const { lang } = await props.params;
 
   return (
-    <html lang={lang} className="scroll-smooth">
+    <html lang={lang}>
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${bricolage.variable} ${onest.variable} ${plexMono.variable} ${zenKaku.variable} ${notoSansSC.variable} antialiased`}
       >
         {props.children}
       </body>

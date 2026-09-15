@@ -1,119 +1,90 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 
-// UI
-import Loader from "@/components/ui/Loader";
 import Navigation from "@/components/ui/Navigation";
 import Footer from "@/components/ui/Footer";
-import Marquee from "@/components/ui/Marquee";
 
-// Sections
-import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
-import Projects from "@/components/sections/Projects";
-import Experience from "@/components/sections/Experience";
-import Skills from "@/components/sections/Skills";
+import Identity from "@/components/sections/Identity";
+import Story from "@/components/sections/Story";
+import Work from "@/components/sections/Work";
+import Path from "@/components/sections/Path";
+import Craft from "@/components/sections/Craft";
 import Contact from "@/components/sections/Contact";
-import { siteConfig } from "@/lib/data";
+
 import type { Dictionary } from "../../dictionaries/types";
+import { sceneState } from "@/lib/sceneState";
 
-// Cursor — no SSR
-const CustomCursor = dynamic(
-  () => import("@/components/ui/CustomCursor"),
-  { ssr: false }
-);
+const SceneCanvas = dynamic(() => import("@/components/canvas/Scene"), { ssr: false });
 
-export default function HomeClient({
-  dict,
-  lang,
-}: {
-  dict: Dictionary;
-  lang: string;
-}) {
-  const [loaded, setLoaded] = useState(false);
-
-  // Init Lenis smooth scroll after load
+export default function HomeClient({ dict, lang }: { dict: Dictionary; lang: string }) {
   useEffect(() => {
-    if (!loaded) return;
-
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let lenis: import("lenis").default | null = null;
     let tickerFn: ((time: number) => void) | null = null;
+    let progressTrigger: import("gsap/ScrollTrigger").ScrollTrigger | null = null;
     let cancelled = false;
 
-    const initLenis = async () => {
-      const { default: Lenis } = await import("lenis");
+    const init = async () => {
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-
       if (cancelled) return;
-
       gsap.registerPlugin(ScrollTrigger);
 
+      progressTrigger = ScrollTrigger.create({
+        start: 0,
+        end: "max",
+        onUpdate: (self) => {
+          sceneState.progress = self.progress;
+        },
+      });
+
+      if (prefersReducedMotion) return;
+
+      const { default: Lenis } = await import("lenis");
+      if (cancelled) return;
+
       lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.1,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
       });
-
       lenis.on("scroll", ScrollTrigger.update);
 
-      tickerFn = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
+      tickerFn = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(tickerFn);
       gsap.ticker.lagSmoothing(0);
     };
 
-    initLenis();
+    init();
 
     return () => {
       cancelled = true;
+      progressTrigger?.kill();
       if (tickerFn) {
         import("gsap").then(({ gsap }) => gsap.ticker.remove(tickerFn!));
       }
       lenis?.destroy();
     };
-  }, [loaded]);
+  }, []);
 
   return (
     <>
-      {!loaded && <Loader onComplete={() => setLoaded(true)} />}
+      <SceneCanvas />
+      <Navigation dict={dict} currentLang={lang} />
 
-      <CustomCursor />
+      <main className="relative z-10">
+        <Identity dict={dict} />
+        <Story dict={dict} />
+        <Work dict={dict} />
+        <Path dict={dict} />
+        <Craft dict={dict} />
+        <Contact dict={dict} />
+      </main>
 
-      <div
-        style={{
-          opacity: loaded ? 1 : 0,
-          transition: "opacity 0.5s ease",
-        }}
-      >
-        <div className="hud-grid" aria-hidden="true" />
-        <span className="hud-corner-label hud-corner-label--tl" aria-hidden="true">
-          {siteConfig.githubHandle}
-        </span>
-        <span className="hud-corner-label hud-corner-label--tr" aria-hidden="true">
-          {siteConfig.availableForWork ? "STATUS // AVAILABLE" : "STATUS // BOOKED"}
-        </span>
-
-        <Navigation dict={dict} currentLang={lang} />
-
-        <main>
-          <Hero dict={dict} />
-          <About dict={dict} />
-          <Marquee dict={dict} />
-          <Projects dict={dict} />
-          <Experience dict={dict} />
-          <Skills dict={dict} />
-          <Contact dict={dict} />
-        </main>
-
+      <div className="relative z-10">
         <Footer dict={dict} />
       </div>
     </>

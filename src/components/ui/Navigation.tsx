@@ -1,314 +1,164 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { locales } from "../../dictionaries";
 import type { Dictionary } from "../../dictionaries/types";
-import { useRouter, usePathname } from "next/navigation";
+import { siteConfig } from "@/lib/data";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP);
+
+const LOCALE_LABEL: Record<string, string> = {
+  ru: "RU",
+  en: "EN",
+  uz: "UZ",
+  ja: "JA",
+  zh: "ZH",
+  es: "ES",
+};
 
 export default function Navigation({ dict, currentLang }: { dict?: Dictionary; currentLang?: string }) {
-  const navRef = useRef<HTMLElement>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const [activeSection, setActiveSection] = useState("hero");
-
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const menuLinksRef = useRef<HTMLDivElement>(null);
-  const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
-    { label: dict?.nav?.about || "About", href: "#about" },
-    { label: dict?.nav?.projects || "Projects", href: "#projects" },
-    { label: dict?.nav?.skills || "Skills", href: "#skills" },
-    { label: dict?.nav?.experience || "Experience", href: "#experience" },
+    { label: dict?.nav?.about || "Story", href: "#story" },
+    { label: dict?.nav?.projects || "Work", href: "#work" },
+    { label: dict?.nav?.experience || "Path", href: "#path" },
+    { label: dict?.nav?.skills || "Craft", href: "#craft" },
     { label: dict?.nav?.contact || "Contact", href: "#contact" },
   ];
 
-  // Scroll logic for the pill
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const initials = (siteConfig.name || "")
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 
-  // Update active section
-  useEffect(() => {
-    const sections = document.querySelectorAll("section[id]");
-    // Track only the triggers this effect creates — ScrollTrigger.getAll()
-    // also returns every other component's triggers (Hero, Contact,
-    // Projects, ...), so killing all of them on unmount would silently
-    // break their scroll animations too if Navigation ever unmounts
-    // without the rest of the page.
-    const triggers = Array.from(sections).map((section) =>
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top center",
-        end: "bottom center",
-        onToggle: (self) => {
-          if (self.isActive) setActiveSection(section.id);
-        },
-      })
-    );
-    return () => triggers.forEach((t) => t.kill());
-  }, []);
+  useGSAP(() => {
+    const panel = panelRef.current;
+    const items = itemsRef.current;
+    if (!panel || !items) return;
 
-  // Magnetic hover effect for desktop links
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 768px)", () => {
-      linksRef.current.forEach((link) => {
-        if (!link) return;
-        const hoverAnim = gsap.to(link, {
-          scale: 1.1,
-          color: "var(--color-accent-violet)",
-          duration: 0.3,
-          ease: "power2.out",
-          paused: true,
-        });
-
-        const handleMouseEnter = () => hoverAnim.play();
-        const handleMouseLeave = () => {
-          hoverAnim.reverse();
-          gsap.to(link, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-        };
-        const handleMouseMove = (e: MouseEvent) => {
-          const rect = link.getBoundingClientRect();
-          const x = (e.clientX - (rect.left + rect.width / 2)) * 0.3;
-          const y = (e.clientY - (rect.top + rect.height / 2)) * 0.3;
-          gsap.to(link, { x, y, duration: 0.2, ease: "power2.out" });
-        };
-
-        link.addEventListener("mouseenter", handleMouseEnter);
-        link.addEventListener("mouseleave", handleMouseLeave);
-        link.addEventListener("mousemove", handleMouseMove);
-
-        return () => {
-          link.removeEventListener("mouseenter", handleMouseEnter);
-          link.removeEventListener("mouseleave", handleMouseLeave);
-          link.removeEventListener("mousemove", handleMouseMove);
-        };
-      });
-    });
-    return () => mm.revert();
-  }, [navItems.length]);
-
-  // Mobile menu animation
-  useEffect(() => {
-    const overlay = overlayRef.current;
-    const links = menuLinksRef.current;
-    if (!overlay || !links) return;
-
-    if (menuOpen) {
+    if (open) {
       document.body.style.overflow = "hidden";
+      gsap.set(panel, { visibility: "visible" });
       gsap.fromTo(
-        overlay,
-        { clipPath: "circle(0% at 50% 0)" },
-        { clipPath: "circle(150% at 50% 0)", duration: 0.8, ease: "power4.inOut" }
+        panel,
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.6, ease: "power4.inOut" }
       );
       gsap.fromTo(
-        Array.from(links.children),
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, delay: 0.3, ease: "power3.out" }
+        Array.from(items.children),
+        { y: 32, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.06, delay: 0.25, ease: "power3.out" }
       );
     } else {
-      document.body.style.overflow = "";
-      gsap.to(overlay, {
-        clipPath: "circle(0% at 50% 0)",
-        duration: 0.8,
-        ease: "power4.inOut",
+      gsap.to(panel, {
+        scaleY: 0,
+        duration: 0.45,
+        ease: "power3.inOut",
+        onComplete: () => {
+          gsap.set(panel, { visibility: "hidden" });
+          document.body.style.overflow = "";
+        },
       });
     }
-  }, [menuOpen]);
+  }, [open]);
 
   const handleNavClick = (href: string) => {
-    setMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      setTimeout(() => {
-        el.scrollIntoView({ behavior: "smooth" });
-      }, menuOpen ? 700 : 0);
-    }
+    setOpen(false);
+    window.setTimeout(
+      () => {
+        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      },
+      open ? 500 : 0
+    );
   };
 
-  const handleLanguageChange = (newLocale: string) => {
-    setLangDropdownOpen(false);
-    const newPath = pathname.replace(`/${currentLang}`, `/${newLocale}`);
-    router.push(newPath || `/${newLocale}`);
+  const handleLocaleChange = (loc: string) => {
+    setOpen(false);
+    const nextPath = pathname.replace(`/${currentLang}`, `/${loc}`);
+    router.push(nextPath || `/${loc}`);
   };
 
   return (
     <>
-      <nav
-        ref={navRef}
-        className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 flex items-center justify-between"
-      >
-        <div
-          className={`w-full flex items-center justify-between transition-all duration-500 rounded-full px-6 md:px-8 py-3 ${
-            isScrolled
-              ? "bg-[rgba(5,5,10,0.6)] backdrop-blur-xl border border-[rgba(255,255,255,0.08)] shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-              : "bg-[rgba(255,255,255,0.02)] backdrop-blur-md border border-[rgba(255,255,255,0.04)]"
-          }`}
+      <div className="fixed top-0 left-0 z-50 p-[var(--edge)]">
+        <button
+          onClick={() => handleNavClick("#top")}
+          className="font-mono text-sm tracking-[0.2em]"
+          style={{ fontFamily: "var(--font-mono)", color: "var(--ink)" }}
+          aria-label="Scroll to top"
         >
-          {/* Logo */}
-          <a
-            href="#hero"
-            className="flex items-center gap-2 group cursor-pointer"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#hero");
-            }}
-          >
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs transition-transform duration-500 group-hover:rotate-180"
-              style={{ background: "var(--gradient-primary)" }}
-            >
-              {"</>"}
-            </div>
-          </a>
+          {initials}
+        </button>
+      </div>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6">
-            {navItems.map((item, i) => (
-              <a
-                key={item.label}
-                ref={(el) => { linksRef.current[i] = el; }}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item.href);
-                }}
-                className="text-sm font-medium transition-colors duration-300"
-                style={{
-                  fontFamily: "var(--font-heading)",
-                  color: activeSection === item.href.substring(1) ? "var(--color-accent-violet)" : "var(--color-text-secondary)",
-                }}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
+      <div className="fixed top-0 right-0 z-[60] p-[var(--edge)]">
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="font-mono text-xs tracking-[0.2em] uppercase flex items-center gap-2"
+          style={{ fontFamily: "var(--font-mono)", color: "var(--ink)" }}
+          aria-expanded={open}
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          {open ? "Close" : "Menu"}
+          <span
+            className="inline-block w-4 h-[1px]"
+            style={{ background: "var(--ink)", transform: open ? "rotate(45deg)" : "none" }}
+          />
+        </button>
+      </div>
 
-          {/* Language Switcher & Burger */}
-          <div className="flex items-center gap-3">
-            
-            {/* Custom Fancy Dropdown */}
-            <div className="relative">
-              <button
-                className="flex items-center gap-2 text-sm font-[var(--font-heading)] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.1)] transition-colors"
-                onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                aria-haspopup="listbox"
-                aria-expanded={langDropdownOpen}
-                aria-label="Change language"
-              >
-                {currentLang || "ru"}
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className={`transition-transform duration-300 ${langDropdownOpen ? "rotate-180" : ""}`}
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </button>
-
-              {/* Dropdown Menu */}
-              <div
-                className={`absolute top-full right-0 mt-2 w-32 rounded-xl bg-[rgba(5,5,10,0.95)] backdrop-blur-3xl border border-[rgba(255,255,255,0.1)] shadow-2xl overflow-hidden transition-all duration-300 origin-top-right ${
-                  langDropdownOpen
-                    ? "opacity-100 scale-100 translate-y-0 visible"
-                    : "opacity-0 scale-95 -translate-y-2 invisible"
-                }`}
-                onMouseLeave={() => setLangDropdownOpen(false)}
-              >
-                <div className="flex flex-col py-2">
-                    {locales.map((loc) => (
-                      <button
-                        key={loc}
-                        onClick={() => handleLanguageChange(loc)}
-                        className={`text-left px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors ${
-                          loc === currentLang
-                            ? "bg-[var(--color-surface-hover)] text-[var(--color-accent-violet)]"
-                            : "text-[var(--color-text-secondary)] hover:bg-[rgba(255,255,255,0.05)] hover:text-white"
-                        }`}
-                      >
-                        {loc === "ru" ? "🇷🇺 " : loc === "en" ? "🇺🇸 " : loc === "ja" ? "🇯🇵 " : loc === "zh" ? "🇨🇳 " : loc === "es" ? "🇪🇸 " : "🇺🇿 "}
-                        {loc}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-            </div>
-
-            {/* Mobile Burger */}
-            <button
-              className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1 relative z-[60] rounded-full bg-[rgba(255,255,255,0.05)]"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-            >
-              <span
-                className={`block w-4 h-[2px] bg-[var(--color-text-primary)] transition-transform duration-300 ${
-                  menuOpen ? "translate-y-[6px] rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`block w-4 h-[2px] bg-[var(--color-text-primary)] transition-opacity duration-300 ${
-                  menuOpen ? "opacity-0" : "opacity-100"
-                }`}
-              />
-              <span
-                className={`block w-4 h-[2px] bg-[var(--color-text-primary)] transition-transform duration-300 ${
-                  menuOpen ? "-translate-y-[6px] -rotate-45" : ""
-                }`}
-              />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Fullscreen Mobile Menu */}
       <div
-        ref={overlayRef}
-        className="fixed inset-0 z-[55] flex items-center justify-center pointer-events-none"
+        ref={panelRef}
+        className="fixed inset-0 z-[55] flex flex-col items-center justify-center gap-12"
         style={{
-          background: "linear-gradient(135deg, rgba(5,5,10,0.95), rgba(123,108,255,0.2))",
-          backdropFilter: "blur(20px)",
-          clipPath: "circle(0% at 50% 0)",
+          background: "var(--bg)",
+          transform: "scaleY(0)",
+          transformOrigin: "top",
+          visibility: "hidden",
         }}
       >
-        <div
-          ref={menuLinksRef}
-          className={`flex flex-col items-center gap-8 ${
-            menuOpen ? "pointer-events-auto" : ""
-          } relative z-10`}
-        >
+        <div ref={itemsRef} className="flex flex-col items-center gap-4">
           {navItems.map((item) => (
             <a
-              key={item.label}
+              key={item.href}
               href={item.href}
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick(item.href);
               }}
-              className="text-4xl sm:text-6xl font-bold tracking-tighter hover:text-[var(--color-accent-violet)] transition-colors"
-              style={{
-                fontFamily: "var(--font-heading)",
-                color: "var(--color-text-primary)",
-              }}
+              className="text-[13vw] sm:text-6xl md:text-7xl leading-none tracking-tight transition-colors"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink)")}
             >
               {item.label}
             </a>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-4 flex-wrap justify-center px-6">
+          {locales.map((loc) => (
+            <button
+              key={loc}
+              onClick={() => handleLocaleChange(loc)}
+              className="font-mono text-xs tracking-[0.15em] px-3 py-1.5 rounded-full border transition-colors"
+              style={{
+                fontFamily: "var(--font-mono)",
+                borderColor: loc === currentLang ? "var(--accent)" : "var(--line)",
+                color: loc === currentLang ? "var(--accent)" : "var(--ink-dim)",
+              }}
+            >
+              {LOCALE_LABEL[loc] || loc.toUpperCase()}
+            </button>
           ))}
         </div>
       </div>
