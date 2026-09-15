@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { gsap } from "gsap";
 import { sceneState } from "@/lib/sceneState";
 
 // Ashima/Stefan Gustavson classic 3D simplex noise — public-domain reference
@@ -75,7 +76,7 @@ const VERTEX_SHADER = /* glsl */ `
     pos.xy += uPointer * 0.12 * (0.35 + aRandom);
     vDisplace = n;
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = (2.0 + aRandom * 1.8) * (280.0 / -mvPosition.z);
+    gl_PointSize = (1.2 + aRandom * 1.1) * (40.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
   }
 `;
@@ -129,6 +130,28 @@ function fibonacciSphere(count: number, radius: number) {
   }
 
   return { positions, randoms };
+}
+
+function CameraRig() {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    camera.position.set(0, 0, reduced ? 4.4 : 8.5);
+    if (reduced) return;
+
+    const tween = gsap.to(camera.position, {
+      z: 4.4,
+      duration: 2.2,
+      delay: 0.1,
+      ease: "power3.out",
+    });
+    return () => {
+      tween.kill();
+    };
+  }, [camera]);
+
+  return null;
 }
 
 function ParticleField({ count }: { count: number }) {
@@ -195,16 +218,17 @@ export default function SceneCanvas() {
   }, []);
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const count = isMobile ? 2200 : 5500;
+  const count = isMobile ? 1400 : 3500;
 
   return (
     <div className="fixed inset-0 z-0" style={{ pointerEvents: "none" }} aria-hidden>
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
-        camera={{ position: [0, 0, 4.4], fov: 45 }}
+        camera={{ position: [0, 0, 8.5], fov: 45 }}
         style={{ background: "var(--bg)" }}
       >
+        <CameraRig />
         <ParticleField count={count} />
       </Canvas>
     </div>

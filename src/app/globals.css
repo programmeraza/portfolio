@@ -93,6 +93,26 @@ button {
   position: relative;
   padding-block: var(--section-pad);
   min-width: 0;
+  /* Anchor jumps land the section top at the viewport top, where the fixed
+     corner mark and menu trigger sit — leave room so they never overlap
+     the first line of a chapter. */
+  scroll-margin-top: 5rem;
+}
+
+/* Static veil over the WebGL canvas: the particle field is decorative and
+   was washing out body copy in text-dense chapters. One fixed layer, no
+   per-frame cost. */
+.canvas-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(10, 9, 8, 0.74) 0%,
+    rgba(10, 9, 8, 0.58) 45%,
+    rgba(10, 9, 8, 0.28) 100%
+  );
 }
 
 .kicker {

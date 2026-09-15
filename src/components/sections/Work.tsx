@@ -13,9 +13,17 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 export default function Work({ dict }: { dict: Dictionary }) {
   const rootRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  const [railVisible, setRailVisible] = useState(false);
 
   useGSAP(
     () => {
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 60%",
+        end: "bottom 40%",
+        onToggle: (self) => setRailVisible(self.isActive),
+      });
+
       const slides = gsap.utils.toArray<HTMLElement>("[data-project-slide]", rootRef.current);
 
       slides.forEach((slide, i) => {
@@ -65,7 +73,13 @@ export default function Work({ dict }: { dict: Dictionary }) {
       {/* Index rail */}
       <div
         className="hidden md:flex fixed top-1/2 -translate-y-1/2 left-0 z-20 flex-col gap-3"
-        style={{ width: "var(--rail-w)", paddingLeft: "1rem" }}
+        style={{
+          width: "var(--rail-w)",
+          paddingLeft: "1rem",
+          opacity: railVisible ? 1 : 0,
+          transition: "opacity 0.4s var(--ease-out)",
+          pointerEvents: "none",
+        }}
         aria-hidden
       >
         {projects.map((p, i) => (
