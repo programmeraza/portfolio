@@ -11,6 +11,7 @@ interface FormData {
   name: string;
   email: string;
   message: string;
+  website: string; // honeypot — must stay empty
 }
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -112,6 +113,7 @@ export default function Contact({ dict }: { dict?: Dictionary }) {
     name: "",
     email: "",
     message: "",
+    website: "",
   });
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -173,7 +175,7 @@ export default function Contact({ dict }: { dict?: Dictionary }) {
       }
 
       setStatus("success");
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", message: "", website: "" });
 
       // Success animation
       if (btnRef.current) {
@@ -336,6 +338,19 @@ export default function Contact({ dict }: { dict?: Dictionary }) {
             className="lg:col-span-3 space-y-4"
             style={{ opacity: 0 }}
           >
+            {/* Honeypot — hidden from real users, bots that auto-fill every
+                field trip it. Kept out of the tab order and screen readers. */}
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
+              onChange={(e) => setFormData((f) => ({ ...f, website: e.target.value }))}
+              style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", opacity: 0 }}
+              tabIndex={-1}
+              aria-hidden="true"
+              autoComplete="off"
+            />
+
             <FloatInput
               id="contact-name"
               label={dict?.contact?.form?.name || "Your Name"}

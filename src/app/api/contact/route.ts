@@ -43,7 +43,17 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, email, message } = body;
+    const { name, email, message, website } = body;
+
+    // Honeypot: a field real visitors never see or fill (hidden off-screen
+    // in the form). Bots that auto-fill every input trip it — pretend
+    // success so they don't learn to skip the field, but drop it silently.
+    if (typeof website === "string" && website.trim() !== "") {
+      return NextResponse.json(
+        { success: true, message: "Message sent successfully!", telegramSent: true },
+        { status: 200 }
+      );
+    }
 
     // Validation
     if (!name || !email || !message) {
