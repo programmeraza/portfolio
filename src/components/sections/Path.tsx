@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 export default function Path({ dict }: { dict: Dictionary }) {
   const rootRef = useRef<HTMLElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
   const [tab, setTab] = useState<"work" | "education">("work");
 
   const entries = experience.filter((e) => e.type === tab);
@@ -31,6 +32,25 @@ export default function Path({ dict }: { dict: Dictionary }) {
           scrollTrigger: { trigger: listRef.current, start: "top 85%" },
         }
       );
+
+      // Spine fills as the column scrolls past — the one scroll-linked
+      // element in this deliberately quiet chapter.
+      if (lineRef.current) {
+        gsap.fromTo(
+          lineRef.current,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: listRef.current,
+              start: "top 75%",
+              end: "bottom 60%",
+              scrub: 0.5,
+            },
+          }
+        );
+      }
     },
     { scope: rootRef, dependencies: [tab] }
   );
@@ -66,8 +86,21 @@ export default function Path({ dict }: { dict: Dictionary }) {
           </div>
         </div>
 
-        <div ref={listRef} className="flex flex-col">
-          {entries.map((entry) => (
+        <div className="relative">
+          <div
+            className="absolute left-0 top-0 bottom-0 w-px hidden md:block"
+            style={{ background: "var(--line)" }}
+            aria-hidden
+          >
+            <div
+              ref={lineRef}
+              className="w-full h-full origin-top"
+              style={{ background: "var(--accent)", transform: "scaleY(0)" }}
+            />
+          </div>
+
+          <div ref={listRef} className="flex flex-col md:pl-8">
+            {entries.map((entry) => (
             <div
               key={entry.id}
               className="grid grid-cols-1 md:grid-cols-[8rem_1fr] gap-3 md:gap-8 py-8"
@@ -93,9 +126,10 @@ export default function Path({ dict }: { dict: Dictionary }) {
                     </span>
                   ))}
                 </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -21,10 +21,17 @@ export default function Work({ dict }: { dict: Dictionary }) {
         trigger: rootRef.current,
         start: "top 60%",
         end: "bottom 40%",
-        onToggle: (self) => setRailVisible(self.isActive),
+        onToggle: (self) => {
+          setRailVisible(self.isActive);
+          // Per-project tint belongs to this chapter only — without this the
+          // rest of the page keeps the last project's color.
+          if (!self.isActive) resetSceneTint();
+        },
       });
 
       const slides = gsap.utils.toArray<HTMLElement>("[data-project-slide]", rootRef.current);
+
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       slides.forEach((slide, i) => {
         gsap.fromTo(
@@ -39,6 +46,29 @@ export default function Work({ dict }: { dict: Dictionary }) {
             scrollTrigger: { trigger: slide, start: "top 70%" },
           }
         );
+
+        if (!reduced) {
+          // Watermark and title drift at different rates as the slide passes
+          // through, so each project reads as its own depth plane.
+          gsap.fromTo(
+            slide.querySelector("[data-slide-watermark]"),
+            { yPercent: 18 },
+            {
+              yPercent: -18,
+              ease: "none",
+              scrollTrigger: { trigger: slide, start: "top bottom", end: "bottom top", scrub: 0.6 },
+            }
+          );
+          gsap.fromTo(
+            slide.querySelector("[data-slide-title]"),
+            { yPercent: 6 },
+            {
+              yPercent: -6,
+              ease: "none",
+              scrollTrigger: { trigger: slide, start: "top bottom", end: "bottom top", scrub: 0.6 },
+            }
+          );
+        }
 
         ScrollTrigger.create({
           trigger: slide,
@@ -85,13 +115,22 @@ export default function Work({ dict }: { dict: Dictionary }) {
         {projects.map((p, i) => (
           <span
             key={p.id}
-            className="font-mono text-xs transition-colors"
+            className="font-mono text-xs flex items-center gap-2 transition-colors"
             style={{
               fontFamily: "var(--font-mono)",
               color: active === i ? "var(--accent)" : "var(--ink-faint)",
             }}
           >
             {String(i + 1).padStart(2, "0")}
+            <span
+              className="block h-px origin-left"
+              style={{
+                width: "1.25rem",
+                background: "var(--accent)",
+                transform: `scaleX(${active === i ? 1 : 0})`,
+                transition: "transform 0.4s var(--ease-out)",
+              }}
+            />
           </span>
         ))}
       </div>
@@ -100,38 +139,58 @@ export default function Work({ dict }: { dict: Dictionary }) {
         <div
           key={project.id}
           data-project-slide
-          className="frame min-h-[100svh] flex flex-col justify-center"
+          className="frame min-h-[100svh] flex flex-col justify-center relative overflow-hidden"
           style={{ borderTop: i === 0 ? "none" : "1px solid var(--line)" }}
         >
-          <p data-reveal className="kicker mb-4" style={{ color: project.color }}>
-            {String(i + 1).padStart(2, "0")} — {project.category}
-          </p>
-          <h3
-            data-reveal
-            className="mb-6 leading-[0.95] tracking-tight"
-            style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 8vw, 6rem)", fontWeight: 700 }}
+          <span
+            data-slide-watermark
+            aria-hidden
+            className="absolute pointer-events-none select-none leading-none"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(12rem, 34vw, 28rem)",
+              fontWeight: 800,
+              color: "transparent",
+              WebkitTextStroke: `1px ${project.color}22`,
+              right: "-2vw",
+              bottom: "4vh",
+            }}
           >
-            {project.title}
-          </h3>
-          <p data-reveal className="max-w-xl mb-8" style={{ color: "var(--ink-dim)", fontSize: "1.1rem" }}>
-            {project.description}
-          </p>
-          <div data-reveal className="flex flex-wrap gap-2 mb-8">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="kicker px-3 py-1 rounded-full"
-                style={{ border: "1px solid var(--line)" }}
-              >
-                {t}
-              </span>
-            ))}
+            {String(i + 1).padStart(2, "0")}
+          </span>
+
+          <div className="relative z-10 min-w-0">
+            <p data-reveal className="kicker mb-4" style={{ color: project.color }}>
+              {String(i + 1).padStart(2, "0")} — {project.category}
+            </p>
+            <h3
+              data-reveal
+              data-slide-title
+              className="mb-6 leading-[0.95] tracking-tight"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 8vw, 6rem)", fontWeight: 700 }}
+            >
+              {project.title}
+            </h3>
+            <p data-reveal className="max-w-xl mb-8" style={{ color: "var(--ink-dim)", fontSize: "1.1rem" }}>
+              {project.description}
+            </p>
+            <div data-reveal className="flex flex-wrap gap-2 mb-8">
+              {project.tech.map((t) => (
+                <span
+                  key={t}
+                  className="kicker px-3 py-1 rounded-full"
+                  style={{ border: "1px solid var(--line)" }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+            {project.liveUrl && (
+              <a data-reveal href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn-outline w-fit">
+                →
+              </a>
+            )}
           </div>
-          {project.liveUrl && (
-            <a data-reveal href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn-outline w-fit">
-              →
-            </a>
-          )}
         </div>
       ))}
 
