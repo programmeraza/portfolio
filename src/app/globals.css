@@ -426,7 +426,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   padding: 0 2rem;
   color: transparent;
-  -webkit-text-stroke: 1px var(--color-border-strong);
+  -webkit-text-stroke: 1px rgba(123, 108, 255, 0.35);
   transition: color 0.3s ease, -webkit-text-stroke 0.3s ease;
 }
 

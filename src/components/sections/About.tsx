@@ -99,39 +99,41 @@ export default function About({ dict }: { dict?: Dictionary }) {
             <div
               className="absolute -bottom-6 -right-6 w-24 h-24 rounded-xl border z-0"
               style={{
-                borderColor: "rgba(0, 212, 255, 0.3)",
-                background: "rgba(0, 212, 255, 0.03)",
+                borderColor: "rgba(123, 108, 255, 0.3)",
+                background: "rgba(123, 108, 255, 0.03)",
               }}
             />
 
-            {/* Avatar placeholder */}
-            <div
-              ref={imageRef}
-              className="relative z-10 rounded-2xl overflow-hidden aspect-[4/5]"
-              style={{ clipPath: "inset(100% 0 0 0)" }}
-            >
-              {/* Ваше фото — /public/avatar.jpg */}
-              <Image
-                src="/avatar.jpg"
-                alt={`${siteConfig.name} — ${siteConfig.title}`}
-                fill
-                preload
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-                style={{ borderRadius: "inherit" }}
-              />
-
-              {/* Overlay badge */}
+            {/* Avatar placeholder — 1px gradient hairline frame around the reveal */}
+            <div className="relative z-10 rounded-2xl p-px" style={{ background: "var(--gradient-primary)" }}>
               <div
-                className="absolute bottom-4 left-4 glass-card px-4 py-2.5 flex items-center gap-2"
+                ref={imageRef}
+                className="relative rounded-2xl overflow-hidden aspect-[4/5]"
+                style={{ clipPath: "inset(100% 0 0 0)" }}
               >
-                <div
-                  className="w-2 h-2 rounded-full animate-pulse-glow"
-                  style={{ background: "var(--color-accent-emerald)" }}
+                {/* Ваше фото — /public/avatar.jpg */}
+                <Image
+                  src="/avatar.jpg"
+                  alt={`${siteConfig.name} — ${siteConfig.title}`}
+                  fill
+                  preload
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                  style={{ borderRadius: "inherit" }}
                 />
-                <span className="text-xs font-medium" style={{ fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
-                  {dict?.contact?.available || "Available for work"}
-                </span>
+
+                {/* Overlay badge */}
+                <div
+                  className="absolute bottom-4 left-4 glass-card px-4 py-2.5 flex items-center gap-2"
+                >
+                  <div
+                    className="w-2 h-2 rounded-full animate-pulse-glow"
+                    style={{ background: "var(--color-accent-emerald)" }}
+                  />
+                  <span className="text-xs font-medium" style={{ fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
+                    {dict?.contact?.available || "Available for work"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -164,14 +166,14 @@ export default function About({ dict }: { dict?: Dictionary }) {
                   value: dict?.about?.infoValues?.status || "Open to offers 🟢",
                 },
               ].map((item) => (
-                <div key={item.label} className="glass-card p-4">
+                <div key={item.label} className="glass-card p-4 min-w-0">
                   <div
                     className="text-xs text-[var(--color-text-muted)] mt-1 font-semibold tracking-widest uppercase font-[var(--font-heading)]"
                   >
                     {item.label}
                   </div>
                   <div
-                    className="text-sm font-medium"
+                    className="text-sm font-medium break-words"
                     style={{ color: "var(--color-text-primary)", fontFamily: "var(--font-heading)" }}
                   >
                     {item.value}
