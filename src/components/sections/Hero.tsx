@@ -82,7 +82,7 @@ export default function Hero({ dict }: { dict?: Dictionary }) {
         className="absolute inset-0 z-[1] pointer-events-none mix-blend-screen"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,126,179,0.08) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(123,108,255,0.1) 0%, transparent 70%)",
         }}
       />
       <div
@@ -186,7 +186,7 @@ export default function Hero({ dict }: { dict?: Dictionary }) {
           className="w-px h-10 bounce-arrow"
           style={{
             background:
-              "linear-gradient(to bottom, var(--color-accent-cyan), transparent)",
+              "linear-gradient(to bottom, var(--color-accent-violet), transparent)",
           }}
         />
       </div>

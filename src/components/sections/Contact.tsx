@@ -42,17 +42,17 @@ function FloatInput({
   const inputStyle = {
     color: "var(--color-text-primary)",
     fontFamily: "var(--font-body)",
-    caretColor: "var(--color-accent-cyan)",
+    caretColor: "var(--color-accent-violet)",
   };
 
   const wrapperStyle = {
     background: "var(--color-surface)",
-    border: `1px solid ${focused ? "var(--color-accent-cyan)" : "var(--color-border)"}`,
+    border: `1px solid ${focused ? "var(--color-accent-violet)" : "var(--color-border)"}`,
     borderRadius: "12px",
     padding: "20px 20px 12px",
     position: "relative" as const,
     transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-    boxShadow: focused ? "0 0 0 3px rgba(0, 212, 255, 0.08)" : "none",
+    boxShadow: focused ? "0 0 0 3px rgba(123, 108, 255, 0.1)" : "none",
   };
 
   const labelStyle = {
@@ -61,7 +61,7 @@ function FloatInput({
     left: "20px",
     transform: multiline ? (isActive ? "none" : "translateY(0)") : isActive ? "none" : "translateY(-50%)",
     fontSize: isActive ? "0.7rem" : "0.875rem",
-    color: isActive ? "var(--color-accent-cyan)" : "var(--color-text-muted)",
+    color: isActive ? "var(--color-accent-violet)" : "var(--color-text-muted)",
     fontFamily: "var(--font-heading)",
     letterSpacing: isActive ? "0.1em" : "normal",
     textTransform: isActive ? ("uppercase" as const) : ("none" as const),
@@ -295,7 +295,7 @@ export default function Contact({ dict }: { dict?: Dictionary }) {
                   className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                   style={{
                     background: "rgba(0,212,255,0.1)",
-                    color: "var(--color-accent-cyan)",
+                    color: "var(--color-accent-violet)",
                   }}
                 >
                   {item.icon}
@@ -321,8 +321,8 @@ export default function Contact({ dict }: { dict?: Dictionary }) {
             <div
               className="p-4 rounded-xl text-xs"
               style={{
-                background: "rgba(0, 212, 255, 0.05)",
-                border: "1px solid rgba(0, 212, 255, 0.15)",
+                background: "rgba(123, 108, 255, 0.06)",
+                border: "1px solid rgba(123, 108, 255, 0.18)",
                 color: "var(--color-text-secondary)",
               }}
             >

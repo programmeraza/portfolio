@@ -16,9 +16,9 @@ export default async function OGImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          background: "#0b0c16",
+          background: "#05050a",
           backgroundImage:
-            "radial-gradient(circle at 20% 20%, rgba(255,126,179,0.25), transparent 50%), radial-gradient(circle at 80% 80%, rgba(123,44,191,0.25), transparent 50%)",
+            "radial-gradient(circle at 20% 20%, rgba(123,108,255,0.25), transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,95,196,0.25), transparent 50%)",
         }}
       >
         <div
@@ -40,7 +40,7 @@ export default async function OGImage() {
               fontSize: 24,
               fontWeight: 700,
               color: "#000",
-              background: "linear-gradient(135deg, #ff7eb3 0%, #7b2cbf 100%)",
+              background: "linear-gradient(135deg, #7b6cff 0%, #4f9dff 45%, #ff5fc4 100%)",
             }}
           >
             {"</>"}

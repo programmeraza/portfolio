@@ -82,7 +82,7 @@ export default function Footer(_props: { dict?: Dictionary }) {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs transition-colors duration-300 hover:text-[var(--color-accent-cyan)]"
+                    className="text-xs transition-colors duration-300 hover:text-[var(--color-accent-violet)]"
                     style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-heading)" }}
                   >
                     {s.label}

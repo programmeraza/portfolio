@@ -68,7 +68,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
         if (!link) return;
         const hoverAnim = gsap.to(link, {
           scale: 1.1,
-          color: "var(--color-accent-cyan)",
+          color: "var(--color-accent-violet)",
           duration: 0.3,
           ease: "power2.out",
           paused: true,
@@ -188,7 +188,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
                 className="text-sm font-medium transition-colors duration-300"
                 style={{
                   fontFamily: "var(--font-heading)",
-                  color: activeSection === item.href.substring(1) ? "var(--color-accent-cyan)" : "var(--color-text-secondary)",
+                  color: activeSection === item.href.substring(1) ? "var(--color-accent-violet)" : "var(--color-text-secondary)",
                 }}
               >
                 {item.label}
@@ -238,7 +238,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
                         onClick={() => handleLanguageChange(loc)}
                         className={`text-left px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors ${
                           loc === currentLang
-                            ? "bg-[var(--color-surface-hover)] text-[var(--color-accent-cyan)]"
+                            ? "bg-[var(--color-surface-hover)] text-[var(--color-accent-violet)]"
                             : "text-[var(--color-text-secondary)] hover:bg-[rgba(255,255,255,0.05)] hover:text-white"
                         }`}
                       >
@@ -301,7 +301,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
                 e.preventDefault();
                 handleNavClick(item.href);
               }}
-              className="text-4xl sm:text-6xl font-bold tracking-tighter hover:text-[var(--color-accent-cyan)] transition-colors"
+              className="text-4xl sm:text-6xl font-bold tracking-tighter hover:text-[var(--color-accent-violet)] transition-colors"
               style={{
                 fontFamily: "var(--font-heading)",
                 color: "var(--color-text-primary)",
