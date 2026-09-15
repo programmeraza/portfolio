@@ -115,7 +115,7 @@ export default function About({ dict }: { dict?: Dictionary }) {
                 src="/avatar.jpg"
                 alt={`${siteConfig.name} — ${siteConfig.title}`}
                 fill
-                priority
+                preload
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
                 style={{ borderRadius: "inherit" }}
