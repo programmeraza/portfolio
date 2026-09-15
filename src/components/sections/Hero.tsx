@@ -92,6 +92,15 @@ export default function Hero({ dict }: { dict?: Dictionary }) {
             "linear-gradient(to top, var(--color-bg) 0%, transparent 100%)",
         }}
       />
+      {/* Scrim behind the text column so the 3D centerpiece (sitting to the
+          right) doesn't fight the headline for contrast */}
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to right, var(--color-bg) 0%, rgba(5,5,10,0.75) 35%, transparent 70%)",
+        }}
+      />
 
       {/* Content */}
       <div className="container-custom relative z-10 pt-20" ref={contentRef}>
