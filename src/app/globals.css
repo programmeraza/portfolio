@@ -258,6 +258,11 @@ body::before {
   max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--container-padding);
+  /* Hero's section is `flex`; flex items default to min-width:auto, which
+     lets a long unbreakable child (e.g. an uppercase heading word) force
+     this wider than the viewport instead of wrapping. min-width:0 is a
+     no-op in every other (non-flex-parent) usage of this class. */
+  min-width: 0;
 }
 
 .section-padding {
@@ -290,10 +295,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-display {
-  font-size: clamp(3.5rem, 8vw, 10rem);
+  font-size: clamp(2.75rem, 8vw, 10rem);
   font-weight: 700;
   line-height: 0.9;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  /* Uppercase can turn a long unbreakable word (e.g. "РАЗРАБОТЧИК") wide
+     enough, at this font size, to trip the flexbox min-width:auto quirk —
+     the parent .container-custom is a flex item of Hero's centered
+     section, so an unbreakable child can force it wider than the
+     viewport instead of wrapping. Let it break as a last resort. */
+  overflow-wrap: break-word;
 }
 
 .text-heading {
