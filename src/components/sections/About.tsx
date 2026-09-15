@@ -181,8 +181,6 @@ export default function About({ dict }: { dict?: Dictionary }) {
             </div>
 
             {/* CTA */}
-            {/* ⚠️ Ссылка ведёт на /public/cv.pdf — этого файла сейчас нет в проекте.
-                Добавьте свой PDF-файл резюме по этому пути, иначе кнопка будет вести на 404. */}
             <div className="flex gap-4">
               <a
                 href="/cv.pdf"

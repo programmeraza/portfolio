@@ -159,9 +159,6 @@ export const projects = [
   },
 ];
 
-// ⚠️ Это ваша реальная трудовая/учебная история — я не могу её выдумать за вас.
-// Работа построена на ваших реальных проектах (AQL/WellFit/NEUROTECH) как freelance-путь.
-// Образование ниже — заглушка, замените или уберите пункт, если не актуально.
 export const experience = [
   {
     id: 1,
@@ -199,18 +196,19 @@ export const experience = [
   {
     id: 4,
     type: "education",
-    title: "[ЗАПОЛНИТЕ] Например: Computer Science",
-    company: "[ЗАПОЛНИТЕ УЧЕБНОЕ ЗАВЕДЕНИЕ]",
-    period: "[ЗАПОЛНИТЕ ПЕРИОД]",
-    description: "[ЗАПОЛНИТЕ]",
-    tech: ["CS Fundamentals"],
+    title: "Информационные технологии",
+    company: "Ташкентский университет информационных технологий (ТУИТ)",
+    period: "Текущее обучение",
+    description:
+      "Учусь по направлению информационных технологий, параллельно прошёл профильную подготовку по front-end в IT-Academy и по back-end — в Najot Talim (с сертификатом).",
+    tech: ["Information Technology", "Front-end", "Back-end"],
     color: "#F59E0B",
   },
 ];
 
 // ⚠️ Проверьте и замените реальными цифрами перед публикацией.
 export const stats = [
-  { label: "Years of Experience", value: 1, suffix: "+" },
+  { label: "Years of Experience", value: 5, suffix: "+" },
   { label: "Projects Completed", value: 7, suffix: "+" },
   { label: "Technologies Mastered", value: 10, suffix: "+" },
   { label: "Happy Clients", value: 3, suffix: "+" },
