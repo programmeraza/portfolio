@@ -99,13 +99,13 @@ export const projects = [
   },
   {
     id: 4,
-    title: "Cleveland",
-    // ⚠️ Автосгенерированное описание — сайт отдаёт пустой HTML без SSR,
-    // поэтому контент не удалось проверить. Замените на реальное описание.
-    description: "[ЗАПОЛНИТЕ] Кратко опишите, что это за проект и его фишку.",
-    longDescription: "[ЗАПОЛНИТЕ]",
-    tech: [],
-    category: "Web",
+    title: "CAU Hospital",
+    description:
+      "Промо-сайт первой клиники в регионе, работающей по стандартам Cleveland Clinic — с поиском по отделениям и приёмом заявок на вакансии.",
+    longDescription:
+      "Сайт медицинского проекта мирового уровня в Узбекистане: презентация клиники, работающей по стандартам Cleveland Clinic, поиск по отделениям и раздел вакансий с формой подачи заявки.",
+    tech: ["Healthcare", "Recruiting", "Search"],
+    category: "Healthcare",
     image: "/projects/cleveland.jpg",
     liveUrl: "https://cliveland.vercel.app/",
     githubUrl: "",
@@ -114,11 +114,13 @@ export const projects = [
   },
   {
     id: 5,
-    title: "Shibuya",
-    description: "[ЗАПОЛНИТЕ] Кратко опишите, что это за проект и его фишку.",
-    longDescription: "[ЗАПОЛНИТЕ]",
-    tech: [],
-    category: "Web",
+    title: "Shibuya Station",
+    description:
+      "Лендинг NFT-коллекции пиксель-арта в стиле аниме — работы навсегда закреплены в блокчейне Bitcoin.",
+    longDescription:
+      "Промо-страница коллекции пиксельного арта «Shibuya Station»: японская/аниме эстетика, крупная типографика и иллюстрации в стиле манги для NFT-проекта на Bitcoin Ordinals.",
+    tech: ["NFT", "Pixel Art", "Web3"],
+    category: "Web3",
     image: "/projects/shibuya.jpg",
     liveUrl: "https://anime-pi-five.vercel.app/",
     githubUrl: "",
@@ -128,10 +130,12 @@ export const projects = [
   {
     id: 6,
     title: "ECOFINANCE",
-    description: "[ЗАПОЛНИТЕ] Кратко опишите, что это за проект и его фишку.",
-    longDescription: "[ЗАПОЛНИТЕ]",
-    tech: [],
-    category: "Fintech",
+    description:
+      "Сайт бухгалтерской компании в Узбекистане: полное бухгалтерское сопровождение бизнеса на аутсорсе.",
+    longDescription:
+      "Корпоративный сайт бухгалтерской компании ECOFINANCE — аутсорс-бухгалтерия для бизнеса в Узбекистане, 5 лет на рынке и 112+ компаний на постоянном обслуживании.",
+    tech: ["Business", "Services", "Landing"],
+    category: "Finance",
     image: "/projects/ecofinance.jpg",
     liveUrl: "https://ecofinance.vercel.app/",
     githubUrl: "",
