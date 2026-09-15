@@ -142,6 +142,21 @@ export const projects = [
     featured: false,
     color: "#6366F1",
   },
+  {
+    id: 7,
+    title: "Nateeja",
+    description:
+      "Мобильное приложение-тренажёр для подготовки к IELTS: мок-тесты по Reading, Listening, Speaking и Writing с отслеживанием прогресса.",
+    longDescription:
+      "Nateeja — IELTS Test Simulator: полноценные мок-тесты по всем секциям экзамена, график динамики баллов и разбор результатов после каждого теста.",
+    tech: ["Mobile", "Education", "IELTS"],
+    category: "EdTech",
+    image: "/projects/nateeja.jpg",
+    liveUrl: "https://lingv-ai.vercel.app/",
+    githubUrl: "",
+    featured: false,
+    color: "#7C3AED",
+  },
 ];
 
 // ⚠️ Это ваша реальная трудовая/учебная история — я не могу её выдумать за вас.
@@ -196,7 +211,7 @@ export const experience = [
 // ⚠️ Проверьте и замените реальными цифрами перед публикацией.
 export const stats = [
   { label: "Years of Experience", value: 1, suffix: "+" },
-  { label: "Projects Completed", value: 6, suffix: "+" },
+  { label: "Projects Completed", value: 7, suffix: "+" },
   { label: "Technologies Mastered", value: 10, suffix: "+" },
   { label: "Happy Clients", value: 3, suffix: "+" },
 ];
