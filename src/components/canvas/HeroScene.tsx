@@ -1,184 +1,134 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const REPEL_RADIUS = 1.5;
-const REPEL_RADIUS_SQ = REPEL_RADIUS * REPEL_RADIUS;
-
-// Largest particle count any instance requests (see HeroScene below).
-const MAX_PARTICLES = 4000;
-
-// Generated once, at module load — not inside the component. Math.random()
-// during render/useMemo trips react-hooks/purity; a smaller instance just
-// takes a subarray (a view, not a copy) of this pool instead of generating
-// its own random set, so no component ever calls Math.random() at render time.
-function generateParticlePool(count: number) {
-  const positions = new Float32Array(count * 3);
-  const targets = new Float32Array(count * 3);
-  const sizes = new Float32Array(count);
-
-  for (let i = 0; i < count; i++) {
-    const x = (Math.random() - 0.5) * 15;
-    const y = (Math.random() - 0.5) * 15;
-    const z = (Math.random() - 0.5) * 10;
-
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = y;
-    positions[i * 3 + 2] = z;
-
-    targets[i * 3] = x;
-    targets[i * 3 + 1] = y;
-    targets[i * 3 + 2] = z;
-
-    sizes[i] = Math.random() * 3.0 + 1.0;
-  }
-
-  return { positions, targets, sizes };
-}
-
-const PARTICLE_POOL = generateParticlePool(MAX_PARTICLES);
-
 const vertexShader = `
-uniform float uTime;
-attribute float aSize;
-attribute vec3 aTarget;
-varying vec3 vColor;
-void main() {
-  vec3 pos = position;
-  float time = uTime * 0.2;
-  
-  // Falling motion (Sakura)
-  pos.y -= mod(time * aSize + aTarget.y, 10.0) - 5.0;
-  
-  // Wind / swirling motion
-  pos.x += sin(time + pos.y * 1.5) * 0.3;
-  pos.z += cos(time + pos.x * 1.5) * 0.3;
+varying vec3 vNormal;
+varying vec3 vViewDir;
 
-  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-  gl_PointSize = aSize * (15.0 / -mvPosition.z);
-  gl_Position = projectionMatrix * mvPosition;
-  
-  // Sakura colors
-  vColor = mix(vec3(1.0, 0.71, 0.77), vec3(1.0, 0.9, 0.95), (sin(time + pos.x) + 1.0) / 2.0);
+void main() {
+  vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+  vNormal = normalize(normalMatrix * normal);
+  vViewDir = normalize(cameraPosition - worldPosition.xyz);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;
 
 const fragmentShader = `
-varying vec3 vColor;
+uniform float uTime;
+uniform vec3 uColorA;
+uniform vec3 uColorB;
+uniform vec3 uColorC;
+uniform vec3 uLightDir1;
+uniform vec3 uLightDir2;
+varying vec3 vNormal;
+varying vec3 vViewDir;
+
 void main() {
-  vec2 xy = gl_PointCoord.xy - vec2(0.5);
-  
-  // Shape the point into an oval/petal
-  float ll = length(vec2(xy.x * 1.5, xy.y * 0.8));
-  if (ll > 0.5) discard;
-  
-  float alpha = smoothstep(0.5, 0.2, ll);
-  gl_FragColor = vec4(vColor, alpha * 0.9);
+  vec3 normal = normalize(vNormal);
+  vec3 viewDir = normalize(vViewDir);
+
+  // Fresnel rim term — brighter where the surface grazes away from the camera
+  float fresnel = pow(1.0 - max(dot(viewDir, normal), 0.0), 2.5);
+
+  // Gradient ramp sampled by a normal-derived angle that drifts over time —
+  // fakes a rotating environment reflection without an actual env map/HDR.
+  float angle = atan(normal.y, normal.x) + uTime * 0.15;
+  float t = (sin(angle) + 1.0) * 0.5;
+  vec3 base = t < 0.5
+    ? mix(uColorA, uColorB, t * 2.0)
+    : mix(uColorB, uColorC, (t - 0.5) * 2.0);
+
+  // Cheap two-light Blinn-Phong specular, no real THREE.Light needed
+  float spec1 = pow(max(dot(normal, normalize(viewDir + uLightDir1)), 0.0), 40.0);
+  float spec2 = pow(max(dot(normal, normalize(viewDir + uLightDir2)), 0.0), 40.0);
+
+  vec3 color = base * (0.5 + 0.5 * fresnel) + vec3(1.0) * (spec1 + spec2) * 0.6;
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
-function SakuraParticles({ particleCount }: { particleCount: number }) {
-  const pointsRef = useRef<THREE.Points>(null);
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
+// Shared across the knot + both rings — one glossy "material family", built
+// once at module load (not via useMemo, so useFrame can mutate its uniforms
+// directly without tripping the React Compiler's hook-return immutability
+// check, the same reason the old sakura pool lived at module scope).
+const CENTERPIECE_MATERIAL = new THREE.ShaderMaterial({
+  vertexShader,
+  fragmentShader,
+  uniforms: {
+    uTime: { value: 0 },
+    uColorA: { value: new THREE.Color("#7b6cff") },
+    uColorB: { value: new THREE.Color("#4f9dff") },
+    uColorC: { value: new THREE.Color("#ff5fc4") },
+    uLightDir1: { value: new THREE.Vector3(0.5, 0.8, 0.6).normalize() },
+    uLightDir2: { value: new THREE.Vector3(-0.6, -0.3, 0.5).normalize() },
+  },
+});
 
-  // Positions get their own copy (the render loop mutates this array in
-  // place every frame); targets/sizes are only ever read, so a view into
-  // the shared pool is enough.
-  const [positions, targets, sizes] = useMemo(
-    () => [
-      PARTICLE_POOL.positions.slice(0, particleCount * 3),
-      PARTICLE_POOL.targets.subarray(0, particleCount * 3),
-      PARTICLE_POOL.sizes.subarray(0, particleCount),
-    ],
-    [particleCount]
-  );
+function Centerpiece({ showRings, animate }: { showRings: boolean; animate: boolean }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const ring1Ref = useRef<THREE.Mesh>(null);
+  const ring2Ref = useRef<THREE.Mesh>(null);
 
-  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
+  // Auto-rotation and pointer-tilt are tracked separately and summed each
+  // frame, rather than both nudging `rotation` directly — additive drift
+  // plus a lerp-toward-target on the same property fight each other.
+  const autoRotation = useRef({ x: 0, y: 0 });
+  const pointerTilt = useRef({ x: 0, y: 0 });
 
-  useFrame((state) => {
-    if (!pointsRef.current || !materialRef.current) return;
-    const ptr = state.pointer;
-
-    // Mutate the live Three.js material's own uniforms, not the object
-    // `uniforms` returned by useMemo above — React Compiler's immutability
-    // check flags writes to a value a hook returned, even from inside
-    // useFrame, so update the instance materialRef points at instead.
-    materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-
-    // Mouse repel physics
-    const positionsAttr = pointsRef.current.geometry.attributes.position;
-    const currentPositions = positionsAttr.array as Float32Array;
-
-    const mouseX = (ptr.x * state.viewport.width) / 2;
-    const mouseY = (ptr.y * state.viewport.height) / 2;
-
-    for (let i = 0; i < particleCount; i++) {
-      const ix = i * 3;
-      const iy = i * 3 + 1;
-      const iz = i * 3 + 2;
-
-      let tx = targets[ix];
-      let ty = targets[iy];
-      let tz = targets[iz];
-
-      // Re-calculate visual position roughly for mouse collision
-      const visualY = ty - ((state.clock.elapsedTime * 0.2 * sizes[i] + ty) % 10.0 - 5.0);
-
-      const dx = mouseX - tx;
-      const dy = mouseY - visualY;
-      const distSq = dx * dx + dy * dy;
-
-      // Skip the sqrt (and the repel math) for particles nowhere near the
-      // pointer — that's the vast majority of them on every frame.
-      if (distSq < REPEL_RADIUS_SQ) {
-        const dist = Math.sqrt(distSq);
-        const force = (REPEL_RADIUS - dist) / REPEL_RADIUS;
-        tx -= (dx / dist) * force * 2.0;
-        ty -= (dy / dist) * force * 2.0;
-        tz += force * 2.0;
-      }
-
-      currentPositions[ix] += (tx - currentPositions[ix]) * 0.05;
-      currentPositions[iy] += (ty - currentPositions[iy]) * 0.05;
-      currentPositions[iz] += (tz - currentPositions[iz]) * 0.05;
+  useFrame((state, delta) => {
+    if (animate) {
+      CENTERPIECE_MATERIAL.uniforms.uTime.value = state.clock.elapsedTime;
     }
 
-    positionsAttr.needsUpdate = true;
+    if (ring1Ref.current && animate) ring1Ref.current.rotation.z += delta * 0.25;
+    if (ring2Ref.current && animate) ring2Ref.current.rotation.x += delta * -0.18;
+
+    if (!groupRef.current) return;
+
+    if (animate) {
+      autoRotation.current.y += delta * 0.15;
+      autoRotation.current.x += delta * 0.05;
+
+      const targetTiltX = state.pointer.y * 0.15;
+      const targetTiltY = state.pointer.x * 0.15;
+      pointerTilt.current.x += (targetTiltX - pointerTilt.current.x) * 0.04;
+      pointerTilt.current.y += (targetTiltY - pointerTilt.current.y) * 0.04;
+
+      groupRef.current.rotation.x = autoRotation.current.x + pointerTilt.current.x;
+      groupRef.current.rotation.y = autoRotation.current.y + pointerTilt.current.y;
+    }
   });
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-aTarget" args={[targets, 3]} />
-        <bufferAttribute attach="attributes-aSize" args={[sizes, 1]} />
-      </bufferGeometry>
-      <shaderMaterial
-        ref={materialRef}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        uniforms={uniforms}
-        transparent
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
+    <group ref={groupRef} scale={0.6} position={[1.4, -0.1, -0.5]} rotation={[0.4, 0.6, 0]}>
+      <mesh material={CENTERPIECE_MATERIAL}>
+        <torusKnotGeometry args={[1, 0.32, 220, 24, 2, 3]} />
+      </mesh>
+      {showRings && (
+        <>
+          <mesh ref={ring1Ref} material={CENTERPIECE_MATERIAL} rotation={[Math.PI / 3, 0, 0]}>
+            <torusGeometry args={[1.9, 0.03, 16, 100]} />
+          </mesh>
+          <mesh ref={ring2Ref} material={CENTERPIECE_MATERIAL} rotation={[0, Math.PI / 4, Math.PI / 6]}>
+            <torusGeometry args={[2.2, 0.025, 16, 100]} />
+          </mesh>
+        </>
+      )}
+    </group>
   );
 }
 
 export default function HeroScene() {
-  // Lazy initializers, not an effect: this component is only ever mounted
+  // Lazy initializers, not effects: this component is only ever mounted
   // client-side (dynamic(..., { ssr: false }) in Hero.tsx), so `window` is
-  // already available on the very first render — no flash, and no
-  // regenerating (and re-randomizing) the particle field right after mount.
+  // already available on the very first render.
   const [reducedMotion, setReducedMotion] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
-  // Fewer particles on small/likely-mobile viewports — same visual density
-  // relative to screen size, far less per-frame CPU work.
-  const [particleCount] = useState(() => (window.innerWidth < 768 ? 1200 : 4000));
+  const [isMobile] = useState(() => window.innerWidth < 768);
 
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -187,9 +137,6 @@ export default function HeroScene() {
     return () => motionQuery.removeEventListener("change", onMotionChange);
   }, []);
 
-  // No reduced-but-still-animated fallback — the entire scene *is* the animation.
-  if (reducedMotion) return null;
-
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 45 }}
@@ -197,7 +144,10 @@ export default function HeroScene() {
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ background: "transparent", pointerEvents: "none" }}
     >
-      <SakuraParticles particleCount={particleCount} />
+      {/* Reduced motion: render the object static (no rotation/parallax,
+          no shifting gradient) rather than nothing — a blank hero is a
+          bigger regression than a still 3D object. */}
+      <Centerpiece showRings={!isMobile} animate={!reducedMotion} />
     </Canvas>
   );
 }
