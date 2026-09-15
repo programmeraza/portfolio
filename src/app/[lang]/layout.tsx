@@ -84,12 +84,17 @@ export default async function RootLayout(props: {
   const { lang } = await props.params;
 
   return (
-    <html lang={lang}>
-      <body
-        className={`${bricolage.variable} ${onest.variable} ${plexMono.variable} ${zenKaku.variable} ${notoSansSC.variable} antialiased`}
-      >
-        {props.children}
-      </body>
+    // The font variables have to live on <html>, not <body>: globals.css
+    // builds --font-display/--font-body/--font-mono on :root out of them, and
+    // a var() is resolved in the scope of the element the custom property is
+    // declared on. With the classes on <body> those tokens computed to the
+    // guaranteed-invalid value on :root and inherited down empty, so every
+    // font silently fell back to the default sans stack.
+    <html
+      lang={lang}
+      className={`${bricolage.variable} ${onest.variable} ${plexMono.variable} ${zenKaku.variable} ${notoSansSC.variable}`}
+    >
+      <body className="antialiased">{props.children}</body>
     </html>
   );
 }
