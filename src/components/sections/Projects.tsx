@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { projects } from "@/lib/data";
+import { projects, siteConfig } from "@/lib/data";
 import type { Dictionary } from "@/dictionaries/types";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -138,7 +138,7 @@ export default function Projects({ dict }: { dict?: Dictionary }) {
           
           {/* End cap */}
           <div className="w-[30vw] shrink-0 flex items-center justify-center">
-            <a href="https://github.com/yourusername" target="_blank" className="btn-primary">
+            <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="btn-primary">
               View All GitHub Projects
             </a>
           </div>
