@@ -45,7 +45,7 @@ export default async function OGImage() {
           >
             {"</>"}
           </div>
-          <div style={{ fontSize: 28, color: "rgba(240,240,240,0.6)" }}>
+          <div style={{ fontSize: 28, color: "rgba(242,242,245,0.62)" }}>
             {siteConfig.title}
           </div>
         </div>
@@ -54,7 +54,7 @@ export default async function OGImage() {
             display: "flex",
             fontSize: 88,
             fontWeight: 700,
-            color: "#f0f0f0",
+            color: "#f2f2f5",
             lineHeight: 1.05,
             letterSpacing: "-0.03em",
           }}
@@ -65,7 +65,7 @@ export default async function OGImage() {
           style={{
             display: "flex",
             fontSize: 30,
-            color: "rgba(240,240,240,0.6)",
+            color: "rgba(242,242,245,0.62)",
             marginTop: 24,
             maxWidth: 900,
           }}

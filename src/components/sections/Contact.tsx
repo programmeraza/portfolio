@@ -294,7 +294,7 @@ export default function Contact({ dict }: { dict?: Dictionary }) {
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                   style={{
-                    background: "rgba(0,212,255,0.1)",
+                    background: "rgba(123, 108, 255, 0.1)",
                     color: "var(--color-accent-violet)",
                   }}
                 >
