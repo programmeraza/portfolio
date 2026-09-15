@@ -1,9 +1,3 @@
-// ============================================================
-// DATA FILE
-// ⚠️ Поля с [ЗАПОЛНИТЕ] — обязательно замените реальными данными
-// перед публикацией, иначе заказчик увидит их прямо на сайте.
-// ============================================================
-
 export const siteConfig = {
   name: "Азиз Каримбердиев",
   title: "Frontend Developer",
@@ -12,7 +6,6 @@ export const siteConfig = {
   email: "karimberdiyevaziz077@gmail.com",
   location: "Ташкент, Узбекистан",
   github: "https://github.com/programmeraza",
-  linkedin: "", // не указан — блок в Footer скрывается автоматически, если пусто
   telegram: "https://t.me/aziz_k_11",
   telegramHandle: "@aziz_k_11",
   githubHandle: "@programmeraza",
@@ -211,5 +204,5 @@ export const stats = [
   { label: "Years of Experience", value: 5, suffix: "+" },
   { label: "Projects Completed", value: 7, suffix: "+" },
   { label: "Technologies Mastered", value: 10, suffix: "+" },
-  { label: "Happy Clients", value: 3, suffix: "+" },
+  { label: "Happy Clients", value: 7, suffix: "+" },
 ];
