@@ -69,11 +69,10 @@ export default function Footer(_props: { dict?: Dictionary }) {
               © {year} {siteConfig.name}. Crafted with ❤️ using Next.js, GSAP & Three.js
             </p>
 
-            {/* Social — ссылка не рендерится, если поле пустое (напр. LinkedIn не указан) */}
+            {/* Social — ссылка не рендерится, если поле пустое */}
             <div className="flex items-center gap-3">
               {[
                 { href: siteConfig.github, label: "GitHub" },
-                { href: siteConfig.linkedin, label: "LinkedIn" },
                 { href: siteConfig.telegram, label: "Telegram" },
               ]
                 .filter((s) => Boolean(s.href))
