@@ -282,6 +282,11 @@ body::before {
 .glass-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  /* A light source hint: a slightly brighter top edge instead of a flat
+     border-color reads as "glass catching light" rather than just an
+     outline. A solid tint (not border-image) keeps this simple and side-
+     scoped without the border-image four-edge slicing headache. */
+  border-top-color: rgba(123, 108, 255, 0.4);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 24px;
