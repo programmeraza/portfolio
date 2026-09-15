@@ -153,7 +153,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
         <div
           className={`w-full flex items-center justify-between transition-all duration-500 rounded-full px-6 md:px-8 py-3 ${
             isScrolled
-              ? "bg-[rgba(11,12,22,0.6)] backdrop-blur-xl border border-[rgba(255,255,255,0.08)] shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+              ? "bg-[rgba(5,5,10,0.6)] backdrop-blur-xl border border-[rgba(255,255,255,0.08)] shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
               : "bg-[rgba(255,255,255,0.02)] backdrop-blur-md border border-[rgba(255,255,255,0.04)]"
           }`}
         >
@@ -224,7 +224,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
 
               {/* Dropdown Menu */}
               <div
-                className={`absolute top-full right-0 mt-2 w-32 rounded-xl bg-[rgba(11,12,22,0.95)] backdrop-blur-3xl border border-[rgba(255,255,255,0.1)] shadow-2xl overflow-hidden transition-all duration-300 origin-top-right ${
+                className={`absolute top-full right-0 mt-2 w-32 rounded-xl bg-[rgba(5,5,10,0.95)] backdrop-blur-3xl border border-[rgba(255,255,255,0.1)] shadow-2xl overflow-hidden transition-all duration-300 origin-top-right ${
                   langDropdownOpen
                     ? "opacity-100 scale-100 translate-y-0 visible"
                     : "opacity-0 scale-95 -translate-y-2 invisible"
@@ -282,7 +282,7 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
         ref={overlayRef}
         className="fixed inset-0 z-[55] flex items-center justify-center pointer-events-none"
         style={{
-          background: "linear-gradient(135deg, rgba(11,12,22,0.95), rgba(123,44,191,0.2))",
+          background: "linear-gradient(135deg, rgba(5,5,10,0.95), rgba(123,108,255,0.2))",
           backdropFilter: "blur(20px)",
           clipPath: "circle(0% at 50% 0)",
         }}
