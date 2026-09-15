@@ -95,14 +95,25 @@ export default function Projects({ dict }: { dict?: Dictionary }) {
                   }}
                 />
                 
+                {/* HUD caption — hidden below md: mobile cards are narrow
+                    enough that wrapped descriptions push the bottom-
+                    anchored content block up into this corner, and there's
+                    no room for both without them overlapping. */}
+                <div
+                  className="hidden md:block absolute top-8 left-8 z-20 text-[0.65rem] tracking-[0.15em] uppercase"
+                  style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}
+                >
+                  {project.category} — {String(i + 1).padStart(2, "0")}
+                </div>
+
                 {/* Content */}
                 <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-end">
                   <div className="mb-4">
-                    <span 
+                    <span
                       className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
-                      style={{ 
-                        background: project.color, 
-                        color: "#000" 
+                      style={{
+                        background: project.color,
+                        color: "#000"
                       }}
                     >
                       {project.category}
@@ -129,7 +140,10 @@ export default function Projects({ dict }: { dict?: Dictionary }) {
                 </div>
 
                 {/* Number Watermark */}
-                <div className="absolute top-8 right-8 text-[8rem] font-bold opacity-10 leading-none pointer-events-none">
+                <div
+                  className="absolute top-8 right-8 text-[8rem] font-bold opacity-10 leading-none pointer-events-none"
+                  style={{ fontFamily: "var(--font-mono)" }}
+                >
                   0{i + 1}
                 </div>
               </a>
