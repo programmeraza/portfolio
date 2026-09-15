@@ -4,7 +4,9 @@ import { useEffect } from "react";
 import { siteConfig } from "@/lib/data";
 import type { Dictionary } from "@/dictionaries/types";
 
-export default function Footer({ dict: _dict }: { dict?: Dictionary }) {
+// `dict` isn't used here (Footer has no translated text yet) but every
+// section takes it for a consistent call signature from page.tsx.
+export default function Footer(_props: { dict?: Dictionary }) {
   useEffect(() => {
     // Scroll progress update
     const updateProgress = () => {

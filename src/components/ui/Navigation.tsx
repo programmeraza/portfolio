@@ -42,7 +42,12 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
   // Update active section
   useEffect(() => {
     const sections = document.querySelectorAll("section[id]");
-    sections.forEach((section) => {
+    // Track only the triggers this effect creates — ScrollTrigger.getAll()
+    // also returns every other component's triggers (Hero, Contact,
+    // Projects, ...), so killing all of them on unmount would silently
+    // break their scroll animations too if Navigation ever unmounts
+    // without the rest of the page.
+    const triggers = Array.from(sections).map((section) =>
       ScrollTrigger.create({
         trigger: section,
         start: "top center",
@@ -50,9 +55,9 @@ export default function Navigation({ dict, currentLang }: { dict?: Dictionary; c
         onToggle: (self) => {
           if (self.isActive) setActiveSection(section.id);
         },
-      });
-    });
-    return () => ScrollTrigger.getAll().forEach(t => t.kill());
+      })
+    );
+    return () => triggers.forEach((t) => t.kill());
   }, []);
 
   // Magnetic hover effect for desktop links

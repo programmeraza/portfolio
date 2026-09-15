@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, Noto_Sans_JP } from "next/font/google";
 import "../globals.css";
-import { locales } from "../../dictionaries";
+import { locales, defaultLocale } from "../../dictionaries";
 import { siteConfig } from "@/lib/data";
 
 const spaceGrotesk = Space_Grotesk({
@@ -23,16 +23,36 @@ const notoSansJP = Noto_Sans_JP({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: `${siteConfig.name} — ${siteConfig.title}`,
-  description: siteConfig.description,
-  metadataBase: new URL("https://my-portfolio-kappa-orcin-91.vercel.app"),
-  openGraph: {
+const SITE_URL = "https://my-portfolio-kappa-orcin-91.vercel.app";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+
+  return {
     title: `${siteConfig.name} — ${siteConfig.title}`,
     description: siteConfig.description,
-    type: "website",
-  },
-};
+    metadataBase: new URL(SITE_URL),
+    alternates: {
+      canonical: `${SITE_URL}/${lang}`,
+      // Each locale has its own URL (/ru, /en, ...) — tell search engines
+      // they're translations of the same page, not separate/duplicate ones.
+      languages: {
+        ...Object.fromEntries(locales.map((l) => [l, `${SITE_URL}/${l}`])),
+        "x-default": `${SITE_URL}/${defaultLocale}`,
+      },
+    },
+    openGraph: {
+      title: `${siteConfig.name} — ${siteConfig.title}`,
+      description: siteConfig.description,
+      type: "website",
+      locale: lang,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0b0c16",

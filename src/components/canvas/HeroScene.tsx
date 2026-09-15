@@ -1,8 +1,44 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+
+const REPEL_RADIUS = 1.5;
+const REPEL_RADIUS_SQ = REPEL_RADIUS * REPEL_RADIUS;
+
+// Largest particle count any instance requests (see HeroScene below).
+const MAX_PARTICLES = 4000;
+
+// Generated once, at module load — not inside the component. Math.random()
+// during render/useMemo trips react-hooks/purity; a smaller instance just
+// takes a subarray (a view, not a copy) of this pool instead of generating
+// its own random set, so no component ever calls Math.random() at render time.
+function generateParticlePool(count: number) {
+  const positions = new Float32Array(count * 3);
+  const targets = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+
+  for (let i = 0; i < count; i++) {
+    const x = (Math.random() - 0.5) * 15;
+    const y = (Math.random() - 0.5) * 15;
+    const z = (Math.random() - 0.5) * 10;
+
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+
+    targets[i * 3] = x;
+    targets[i * 3 + 1] = y;
+    targets[i * 3 + 2] = z;
+
+    sizes[i] = Math.random() * 3.0 + 1.0;
+  }
+
+  return { positions, targets, sizes };
+}
+
+const PARTICLE_POOL = generateParticlePool(MAX_PARTICLES);
 
 const vertexShader = `
 uniform float uTime;
@@ -43,52 +79,41 @@ void main() {
 }
 `;
 
-function SakuraParticles() {
+function SakuraParticles({ particleCount }: { particleCount: number }) {
   const pointsRef = useRef<THREE.Points>(null);
-  
-  const particleCount = 4000;
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
 
-  const [positions, targets, sizes] = useMemo(() => {
-    const p = new Float32Array(particleCount * 3);
-    const t = new Float32Array(particleCount * 3);
-    const s = new Float32Array(particleCount);
+  // Positions get their own copy (the render loop mutates this array in
+  // place every frame); targets/sizes are only ever read, so a view into
+  // the shared pool is enough.
+  const [positions, targets, sizes] = useMemo(
+    () => [
+      PARTICLE_POOL.positions.slice(0, particleCount * 3),
+      PARTICLE_POOL.targets.subarray(0, particleCount * 3),
+      PARTICLE_POOL.sizes.subarray(0, particleCount),
+    ],
+    [particleCount]
+  );
 
-    for (let i = 0; i < particleCount; i++) {
-      // Spread across a wide area
-      const x = (Math.random() - 0.5) * 15;
-      const y = (Math.random() - 0.5) * 15;
-      const z = (Math.random() - 0.5) * 10;
-
-      p[i * 3] = x;
-      p[i * 3 + 1] = y;
-      p[i * 3 + 2] = z;
-      
-      t[i * 3] = x;
-      t[i * 3 + 1] = y;
-      t[i * 3 + 2] = z;
-      
-      s[i] = Math.random() * 3.0 + 1.0;
-    }
-    return [p, t, s];
-  }, [particleCount]);
-
-  const uniforms = useMemo(() => ({
-    uTime: { value: 0 }
-  }), []);
+  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
 
   useFrame((state) => {
-    if (!pointsRef.current) return;
+    if (!pointsRef.current || !materialRef.current) return;
     const ptr = state.pointer;
-    
-    uniforms.uTime.value = state.clock.elapsedTime;
+
+    // Mutate the live Three.js material's own uniforms, not the object
+    // `uniforms` returned by useMemo above — React Compiler's immutability
+    // check flags writes to a value a hook returned, even from inside
+    // useFrame, so update the instance materialRef points at instead.
+    materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
 
     // Mouse repel physics
     const positionsAttr = pointsRef.current.geometry.attributes.position;
     const currentPositions = positionsAttr.array as Float32Array;
-    
+
     const mouseX = (ptr.x * state.viewport.width) / 2;
     const mouseY = (ptr.y * state.viewport.height) / 2;
-    
+
     for (let i = 0; i < particleCount; i++) {
       const ix = i * 3;
       const iy = i * 3 + 1;
@@ -100,13 +125,16 @@ function SakuraParticles() {
 
       // Re-calculate visual position roughly for mouse collision
       const visualY = ty - ((state.clock.elapsedTime * 0.2 * sizes[i] + ty) % 10.0 - 5.0);
-      
+
       const dx = mouseX - tx;
       const dy = mouseY - visualY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const distSq = dx * dx + dy * dy;
 
-      if (dist < 1.5) {
-        const force = (1.5 - dist) / 1.5;
+      // Skip the sqrt (and the repel math) for particles nowhere near the
+      // pointer — that's the vast majority of them on every frame.
+      if (distSq < REPEL_RADIUS_SQ) {
+        const dist = Math.sqrt(distSq);
+        const force = (REPEL_RADIUS - dist) / REPEL_RADIUS;
         tx -= (dx / dist) * force * 2.0;
         ty -= (dy / dist) * force * 2.0;
         tz += force * 2.0;
@@ -116,7 +144,7 @@ function SakuraParticles() {
       currentPositions[iy] += (ty - currentPositions[iy]) * 0.05;
       currentPositions[iz] += (tz - currentPositions[iz]) * 0.05;
     }
-    
+
     positionsAttr.needsUpdate = true;
   });
 
@@ -128,6 +156,7 @@ function SakuraParticles() {
         <bufferAttribute attach="attributes-aSize" args={[sizes, 1]} />
       </bufferGeometry>
       <shaderMaterial
+        ref={materialRef}
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={uniforms}
@@ -140,6 +169,27 @@ function SakuraParticles() {
 }
 
 export default function HeroScene() {
+  // Lazy initializers, not an effect: this component is only ever mounted
+  // client-side (dynamic(..., { ssr: false }) in Hero.tsx), so `window` is
+  // already available on the very first render — no flash, and no
+  // regenerating (and re-randomizing) the particle field right after mount.
+  const [reducedMotion, setReducedMotion] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+  // Fewer particles on small/likely-mobile viewports — same visual density
+  // relative to screen size, far less per-frame CPU work.
+  const [particleCount] = useState(() => (window.innerWidth < 768 ? 1200 : 4000));
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onMotionChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    motionQuery.addEventListener("change", onMotionChange);
+    return () => motionQuery.removeEventListener("change", onMotionChange);
+  }, []);
+
+  // No reduced-but-still-animated fallback — the entire scene *is* the animation.
+  if (reducedMotion) return null;
+
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 45 }}
@@ -147,7 +197,7 @@ export default function HeroScene() {
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ background: "transparent", pointerEvents: "none" }}
     >
-      <SakuraParticles />
+      <SakuraParticles particleCount={particleCount} />
     </Canvas>
   );
 }

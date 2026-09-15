@@ -54,33 +54,44 @@ export default function CustomCursor() {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
 
-    const addListeners = () => {
-      const interactiveEls = document.querySelectorAll(
-        'a, button, [role="button"], .cursor-pointer, input, select, textarea, label'
-      );
-      const textEls = document.querySelectorAll("input[type='text'], input[type='email'], textarea");
+    // Delegated hover tracking instead of binding mouseenter/mouseleave to
+    // every matching element (plus a MutationObserver to re-bind on every
+    // DOM change): that version never removed old listeners, so they piled
+    // up without bound on any page with dynamic content. mouseover/mouseout
+    // bubble, so one pair of listeners on document covers elements added
+    // later for free — closest() + relatedTarget avoids re-triggering while
+    // the pointer moves between nested children of the same match.
+    const interactiveSelector =
+      'a, button, [role="button"], .cursor-pointer, input, select, textarea, label';
+    const textSelector = "input[type='text'], input[type='email'], textarea";
 
-      interactiveEls.forEach((el) => {
-        el.addEventListener("mouseenter", onMouseEnterLink);
-        el.addEventListener("mouseleave", onMouseLeaveLink);
-      });
-
-      textEls.forEach((el) => {
-        el.addEventListener("mouseenter", onMouseEnterText);
-        el.addEventListener("mouseleave", onMouseLeaveText);
-      });
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as Element;
+      if (target.closest(interactiveSelector)) onMouseEnterLink();
+      if (target.closest(textSelector)) onMouseEnterText();
     };
 
-    const observer = new MutationObserver(addListeners);
-    observer.observe(document.body, { childList: true, subtree: true });
-    addListeners();
+    const onMouseOut = (e: MouseEvent) => {
+      const target = e.target as Element;
+      const related = e.relatedTarget as Element | null;
+      if (target.closest(interactiveSelector) && !related?.closest(interactiveSelector)) {
+        onMouseLeaveLink();
+      }
+      if (target.closest(textSelector) && !related?.closest(textSelector)) {
+        onMouseLeaveText();
+      }
+    };
+
+    document.addEventListener("mouseover", onMouseOver);
+    document.addEventListener("mouseout", onMouseOut);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mouseover", onMouseOver);
+      document.removeEventListener("mouseout", onMouseOut);
       cancelAnimationFrame(rafRef.current);
-      observer.disconnect();
     };
   }, []);
 
