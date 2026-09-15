@@ -50,6 +50,7 @@
     "title2": "something great",
     "desc": "Have a project idea or just want to say hi? My inbox is open.",
     "form": {
+      "open": "Write a message",
       "name": "Your Name",
       "email": "Your Email",
       "message": "Message",

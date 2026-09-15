@@ -97,8 +97,8 @@ export default function Contact({ dict }: { dict: Dictionary }) {
         </p>
 
         <div data-reveal className="flex flex-wrap gap-4 mb-4">
-          <button className="btn" onClick={() => setOpen((v) => !v)}>
-            {open ? "×" : dict.contact.form.send}
+          <button className="btn" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+            {open ? "×" : dict.contact.form.open}
           </button>
           <a href={`mailto:${siteConfig.email}`} className="btn-outline">
             {siteConfig.email}

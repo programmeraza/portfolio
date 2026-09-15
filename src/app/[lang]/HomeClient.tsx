@@ -74,6 +74,7 @@ export default function HomeClient({ dict, lang }: { dict: Dictionary; lang: str
     <>
       <SceneCanvas />
       <div className="canvas-veil" aria-hidden />
+      <div className="top-scrim" aria-hidden />
       <Navigation dict={dict} currentLang={lang} />
 
       <main className="relative z-10">

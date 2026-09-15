@@ -50,6 +50,7 @@
     "title2": "buyuk narsa yaratamiz",
     "desc": "Loyiha g'oyasi bormi yoki shunchaki salomlashmoqchimisiz? Menga yozing.",
     "form": {
+      "open": "Xabar yozish",
       "name": "Ismingiz",
       "email": "Email manzilingiz",
       "message": "Xabar",
