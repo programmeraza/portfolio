@@ -32,18 +32,24 @@ export default function Story({ dict }: { dict: Dictionary }) {
         }
       );
 
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const numerals = gsap.utils.toArray<HTMLElement>("[data-stat-value]", statsRowRef.current);
       numerals.forEach((el) => {
         const target = Number(el.dataset.statValue || 0);
-        const obj = { value: 0 };
+        // Without motion the count-up never runs, and these are real figures —
+        // showing "0 years of experience" would be worse than showing no
+        // animation at all.
+        if (reduced) {
+          el.textContent = target.toString();
+          return;
+        }
         ScrollTrigger.create({
           trigger: el,
           start: "top 90%",
           end: "top 55%",
           scrub: 0.4,
           onUpdate: (self) => {
-            obj.value = target * self.progress;
-            el.textContent = Math.round(obj.value).toString();
+            el.textContent = Math.round(target * self.progress).toString();
           },
         });
       });
