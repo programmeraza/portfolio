@@ -33,12 +33,22 @@ export default function Home(props: { params: Promise<{ lang: string }> }) {
   const [dict, setDict] = useState<Dictionary | null>(null);
   const [dictError, setDictError] = useState(false);
 
+  // Reset dict/dictError synchronously during render when `lang` changes —
+  // React's documented pattern for resetting state in response to a
+  // changed prop (see "Adjusting state when a prop changes" in the React
+  // docs), rather than calling setState at the top of a useEffect, which
+  // costs an extra render pass and trips react-hooks/set-state-in-effect.
+  const [prevLang, setPrevLang] = useState(lang);
+  if (lang !== prevLang) {
+    setPrevLang(lang);
+    setDict(null);
+    setDictError(false);
+  }
+
   // Загружаем словарь, но НЕ блокируем показ Loader'а — первый экран
   // должен появляться мгновенно, а не после ответа сети.
   useEffect(() => {
     let cancelled = false;
-    setDict(null);
-    setDictError(false);
 
     getDictionary(lang as Locale)
       .then((d) => {

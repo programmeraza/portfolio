@@ -7,6 +7,39 @@ import * as THREE from "three";
 const REPEL_RADIUS = 1.5;
 const REPEL_RADIUS_SQ = REPEL_RADIUS * REPEL_RADIUS;
 
+// Largest particle count any instance requests (see HeroScene below).
+const MAX_PARTICLES = 4000;
+
+// Generated once, at module load — not inside the component. Math.random()
+// during render/useMemo trips react-hooks/purity; a smaller instance just
+// takes a subarray (a view, not a copy) of this pool instead of generating
+// its own random set, so no component ever calls Math.random() at render time.
+function generateParticlePool(count: number) {
+  const positions = new Float32Array(count * 3);
+  const targets = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+
+  for (let i = 0; i < count; i++) {
+    const x = (Math.random() - 0.5) * 15;
+    const y = (Math.random() - 0.5) * 15;
+    const z = (Math.random() - 0.5) * 10;
+
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+
+    targets[i * 3] = x;
+    targets[i * 3 + 1] = y;
+    targets[i * 3 + 2] = z;
+
+    sizes[i] = Math.random() * 3.0 + 1.0;
+  }
+
+  return { positions, targets, sizes };
+}
+
+const PARTICLE_POOL = generateParticlePool(MAX_PARTICLES);
+
 const vertexShader = `
 uniform float uTime;
 attribute float aSize;
@@ -50,29 +83,17 @@ function SakuraParticles({ particleCount }: { particleCount: number }) {
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
 
-  const [positions, targets, sizes] = useMemo(() => {
-    const p = new Float32Array(particleCount * 3);
-    const t = new Float32Array(particleCount * 3);
-    const s = new Float32Array(particleCount);
-
-    for (let i = 0; i < particleCount; i++) {
-      // Spread across a wide area
-      const x = (Math.random() - 0.5) * 15;
-      const y = (Math.random() - 0.5) * 15;
-      const z = (Math.random() - 0.5) * 10;
-
-      p[i * 3] = x;
-      p[i * 3 + 1] = y;
-      p[i * 3 + 2] = z;
-      
-      t[i * 3] = x;
-      t[i * 3 + 1] = y;
-      t[i * 3 + 2] = z;
-      
-      s[i] = Math.random() * 3.0 + 1.0;
-    }
-    return [p, t, s];
-  }, [particleCount]);
+  // Positions get their own copy (the render loop mutates this array in
+  // place every frame); targets/sizes are only ever read, so a view into
+  // the shared pool is enough.
+  const [positions, targets, sizes] = useMemo(
+    () => [
+      PARTICLE_POOL.positions.slice(0, particleCount * 3),
+      PARTICLE_POOL.targets.subarray(0, particleCount * 3),
+      PARTICLE_POOL.sizes.subarray(0, particleCount),
+    ],
+    [particleCount]
+  );
 
   const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
 
